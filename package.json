@@ -4,8 +4,8 @@
   "description": "IIT Kanpur Course Information Catalog, Timetable Grid & Semester Planner",
   "main": "index.html",
   "scripts": {
-    "dev": "npx serve . -p 8888 --no-clipboard",
-    "start": "npx serve . -p 8888 --no-clipboard",
+    "dev": "node server.js",
+    "start": "node server.js",
     "build": "echo 'Static build ready'"
   },
   "keywords": [
