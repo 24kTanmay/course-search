@@ -1,0 +1,3370 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<!-- Primary Meta -->
+<title>IITK Course Portal - Course Search &amp; Semester Planner</title>
+<meta name="description" content="Search and filter IIT Kanpur courses by department, faculty, slot, day, and venue. Plan your semester, detect clashes, and view the full timetable grid.">
+<meta name="keywords" content="IITK, IIT Kanpur, course search, semester planner, timetable, slot, pre-registration, course catalog">
+<meta name="author" content="IIT Kanpur">
+<meta name="robots" content="index, follow">
+
+<!-- Theme / PWA -->
+<meta name="theme-color" content="#0a0b0d" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f1f4f8" media="(prefers-color-scheme: light)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="IITK Courses">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<!-- Open Graph (WhatsApp / Telegram / Facebook link previews) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="IITK Course Portal - Course Search &amp; Semester Planner">
+<meta property="og:description" content="Search IIT Kanpur courses by department, faculty, slot, day and venue. Build your semester plan and detect clashes instantly.">
+<meta property="og:url" content="https://iitk-courses.netlify.app/">
+<meta property="og:image" content="https://iitk-courses.netlify.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="IITK Course Portal">
+<meta property="og:locale" content="en_IN">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="IITK Course Portal">
+<meta name="twitter:description" content="Search, filter and plan your IIT Kanpur semester. Clash detection, timetable view, and more.">
+<meta name="twitter:image" content="https://iitk-courses.netlify.app/og-image.png">
+
+<!-- Performance -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── CORPORATE MULTI-SHADE GREY PALETTE & DESIGN SYSTEM ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --bg-deep: #07080a;
+  --bg: #0b0d11;
+  --surface: #12151b;
+  --surface-raised: #181c24;
+  --surface-elevated: #1f242e;
+  --surface-hover: #262c37;
+  --surface-sunken: #0e1015;
+
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border: #232834;
+  --border-strong: #333a4a;
+  --border-bright: #475166;
+
+  --text-main: #f0f3f8;
+  --text-muted: #8d98aa;
+  --text-faint: #5a6374;
+  --text-inverse: #0b0d11;
+
+  --brand-blue: #3b82f6;
+  --brand-blue-hover: #2563eb;
+  --brand-cyan: #06b6d4;
+  --brand-indigo: #6366f1;
+  --brand-amber: #f59e0b;
+  --brand-rose: #f43f5e;
+  --brand-emerald: #10b981;
+
+  --badge-glow: rgba(59, 130, 246, 0.12);
+  --card-glow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--border);
+  --card-glow-hover: 0 8px 24px -6px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--border-strong);
+  --modal-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px var(--border-strong);
+
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-pill: 9999px;
+
+  --sidebar-w: 290px;
+  --header-h: 58px;
+  --transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme="light"] {
+  --bg-deep: #e8ecf2;
+  --bg: #f1f4f8;
+  --surface: #ffffff;
+  --surface-raised: #f7f9fc;
+  --surface-elevated: #ffffff;
+  --surface-hover: #f1f4f9;
+  --surface-sunken: #edf1f6;
+
+  --border-subtle: rgba(0, 0, 0, 0.04);
+  --border: #dbe2ea;
+  --border-strong: #c2cbd8;
+  --border-bright: #9aa7b8;
+
+  --text-main: #0f172a;
+  --text-muted: #566479;
+  --text-faint: #8896aa;
+  --text-inverse: #ffffff;
+
+  --brand-blue: #2563eb;
+  --brand-blue-hover: #1d4ed8;
+  --brand-cyan: #0891b2;
+  --brand-indigo: #4f46e5;
+  --brand-amber: #d97706;
+  --brand-rose: #e11d48;
+  --brand-emerald: #059669;
+
+  --badge-glow: rgba(37, 99, 235, 0.08);
+  --card-glow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 0 0 1px var(--border);
+  --card-glow-hover: 0 8px 24px -6px rgba(0, 0, 0, 0.12), 0 0 0 1px var(--border-strong);
+  --modal-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.2), 0 0 0 1px var(--border-strong);
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; height: 380px;
+  background: radial-gradient(circle 800px at 50% -120px, rgba(59, 130, 246, 0.06), transparent 80%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.v-icon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  stroke-width: 2;
+  stroke: currentColor;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* ── APPLICATION HEADER ── */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  height: var(--header-h);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  gap: 14px;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: fit-content;
+}
+.brand-logo-badge {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand-blue);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.brand-text-block {
+  display: flex;
+  flex-direction: column;
+}
+.brand-title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.brand-subtitle {
+  font-size: 0.70rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.search-center-box {
+  flex: 1;
+  max-width: 580px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.search-icon-wrapper {
+  position: absolute;
+  left: 12px;
+  color: var(--text-faint);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+.search-input-field {
+  width: 100%;
+  height: 36px;
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0 76px 0 34px;
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  transition: var(--transition);
+}
+.search-input-field:focus {
+  outline: none;
+  border-color: var(--brand-blue);
+  background: var(--surface);
+  box-shadow: 0 0 0 3px var(--badge-glow);
+}
+.search-input-field::placeholder {
+  color: var(--text-faint);
+}
+.search-kbd-indicator {
+  position: absolute;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  pointer-events: none;
+}
+.kbd-badge {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 600;
+  padding: 1px 5px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xs);
+  color: var(--text-muted);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: fit-content;
+}
+.btn-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-icon:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+  color: var(--text-main);
+}
+.btn-icon.active {
+  background: var(--brand-blue);
+  border-color: var(--brand-blue);
+  color: #ffffff;
+}
+
+.btn-planner-header {
+  height: 34px;
+  padding: 0 12px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-planner-header:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+}
+.btn-planner-header.has-courses {
+  border-color: rgba(245, 158, 11, 0.4);
+  background: rgba(245, 158, 11, 0.08);
+}
+.planner-counter-badge {
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-strong);
+  color: var(--brand-amber);
+}
+
+.btn-mobile-filter {
+  display: none;
+  height: 34px;
+  padding: 0 10px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── MAIN LAYOUT ── */
+.app-layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  min-height: calc(100vh - var(--header-h));
+  position: relative;
+  transition: grid-template-columns 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.app-layout.sidebar-collapsed {
+  grid-template-columns: 0px 1fr;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  background: var(--surface-sunken);
+  border-right: 1px solid var(--border);
+  padding: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100vh - var(--header-h));
+  position: sticky;
+  top: var(--header-h);
+  transition: padding 0.24s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+}
+
+.app-layout.sidebar-collapsed .sidebar {
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  border-right: none;
+}
+
+.sidebar-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-title-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-section {
+  margin-bottom: 16px;
+}
+.filter-label-title {
+  font-size: 0.73rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.filter-label-title span.count-hint {
+  font-size: 0.65rem;
+  color: var(--text-faint);
+  text-transform: none;
+  font-weight: normal;
+}
+
+.filter-select-input {
+  width: 100%;
+  height: 34px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  padding: 0 10px;
+  font-family: var(--font-sans);
+  font-size: 0.80rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.filter-select-input:focus {
+  outline: none;
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 2px var(--badge-glow);
+}
+.filter-select-input.has-val {
+  border-color: var(--border-strong);
+  background: var(--surface-raised);
+}
+
+.time-range-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 6px;
+}
+.time-input-field {
+  width: 100%;
+  height: 32px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  padding: 0 6px;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  text-align: center;
+}
+.time-input-field:focus {
+  outline: none;
+  border-color: var(--brand-blue);
+}
+
+.days-button-group {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+.day-toggle-btn {
+  height: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.day-toggle-btn:hover {
+  border-color: var(--border-strong);
+  color: var(--text-main);
+}
+.day-toggle-btn.active {
+  background: var(--brand-blue);
+  border-color: var(--brand-blue);
+  color: #ffffff;
+}
+
+.type-buttons-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.type-toggle-btn {
+  padding: 4px 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  color: var(--text-muted);
+  font-size: 0.70rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.type-toggle-btn:hover {
+  border-color: var(--border-strong);
+  color: var(--text-main);
+}
+.type-toggle-btn.active {
+  background: var(--surface-raised);
+  border-color: var(--brand-blue);
+  color: var(--brand-blue);
+}
+
+.btn-reset-filters {
+  width: 100%;
+  height: 32px;
+  margin-top: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.btn-reset-filters:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+  color: var(--text-main);
+}
+
+/* ── MAIN CONTENT AREA ── */
+.content-area {
+  padding: 16px 20px 40px;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── TOOLBAR ── */
+.toolbar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.toolbar-stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.stat-pill {
+  font-size: 0.80rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.stat-pill strong {
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+.btn-toolbar-expand-sidebar {
+  display: none;
+  height: 30px;
+  padding: 0 10px;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  align-items: center;
+}
+.btn-toolbar-expand-sidebar:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+}
+
+.view-mode-group {
+  display: inline-flex;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  gap: 2px;
+}
+.view-btn {
+  height: 28px;
+  padding: 0 12px;
+  border-radius: var(--radius-xs);
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+}
+.view-btn:hover {
+  color: var(--text-main);
+}
+.view-btn.active {
+  background: var(--surface-raised);
+  color: var(--text-main);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+}
+
+/* ── ACTIVE-FILTER CHIPS BAR ── */
+.active-filters-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 14px;
+}
+.active-filters-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+  margin-right: 4px;
+}
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-strong);
+  color: var(--text-main);
+  font-size: 0.72rem;
+  font-weight: 500;
+  transition: var(--transition);
+}
+.filter-chip-remove {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  border-radius: 50%;
+  padding: 1px;
+}
+.filter-chip-remove:hover {
+  color: var(--brand-rose);
+  background: rgba(244, 63, 94, 0.1);
+}
+.btn-clear-all-chips {
+  border: none;
+  background: transparent;
+  color: var(--brand-blue);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 3px 6px;
+  margin-left: auto;
+  border-radius: var(--radius-xs);
+  transition: var(--transition);
+}
+.btn-clear-all-chips:hover {
+  text-decoration: underline;
+}
+
+/* ── COURSE CARDS GRID ── */
+#cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 14px;
+}
+#cards-grid.list-view {
+  grid-template-columns: 1fr;
+}
+
+.course-card {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  box-shadow: var(--card-glow);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.course-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--card-glow-hover);
+  transform: translateY(-2px);
+}
+.course-card:active {
+  transform: translateY(0) scale(0.995);
+}
+.course-card:focus-visible {
+  outline: none;
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 3px var(--badge-glow);
+}
+
+.card-top {
+  padding: 14px 16px 0;
+}
+.card-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.dept-pill {
+  padding: 2px 7px;
+  border-radius: var(--radius-xs);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.card-actions-top {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.btn-star {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-xs);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-faint);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-star:hover {
+  background: var(--surface-raised);
+  border-color: var(--border);
+  color: var(--brand-amber);
+}
+.btn-star.starred {
+  color: var(--brand-amber);
+}
+
+.course-title-text {
+  font-size: 0.90rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text-main);
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+#cards-grid.list-view .course-title-text {
+  -webkit-line-clamp: 1;
+}
+
+.course-code-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.course-code-tag {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.78rem;
+  color: var(--brand-blue);
+  letter-spacing: 0.02em;
+}
+.btn-copy-code {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 5px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-copy-code:hover {
+  border-color: var(--border-strong);
+  color: var(--text-main);
+}
+
+.instructor-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  margin-bottom: 10px;
+}
+
+.card-sessions-container {
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+.session-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface-sunken);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 5px 8px;
+  font-size: 0.72rem;
+}
+.day-dots-container {
+  display: flex;
+  gap: 2px;
+}
+.day-dot-chip {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0 4px;
+  border-radius: 2px;
+  background: var(--surface-raised);
+  color: var(--text-faint);
+}
+.day-dot-chip.highlighted {
+  background: var(--border-strong);
+  color: var(--text-main);
+}
+.session-time-text {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--text-main);
+  font-size: 0.73rem;
+}
+.session-venue-tag {
+  margin-left: auto;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.70rem;
+}
+.no-sessions-hint {
+  font-size: 0.72rem;
+  color: var(--text-faint);
+  font-style: italic;
+  padding: 4px 0;
+}
+
+.card-bottom-footer {
+  margin-top: 12px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-raised);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.slot-tag-label {
+  font-size: 0.70rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-bottom-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.fch-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: var(--brand-emerald);
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+.type-badge {
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+.btn-view-details {
+  padding: 4px 10px;
+  border-radius: var(--radius-xs);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  color: var(--text-main);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-view-details:hover {
+  background: var(--brand-blue);
+  border-color: var(--brand-blue);
+  color: #ffffff;
+}
+
+/* ── TIMETABLE ELEVATED VIEW ── */
+#timetable-view-container {
+  display: none;
+}
+.tt-elevated-header {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.tt-scope-selector {
+  display: inline-flex;
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  gap: 2px;
+}
+.tt-scope-btn {
+  height: 28px;
+  padding: 0 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+}
+.tt-scope-btn.active {
+  background: var(--surface-raised);
+  color: var(--text-main);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.tt-clash-warning-bar {
+  display: none;
+  width: 100%;
+  padding: 8px 12px;
+  background: rgba(244, 63, 94, 0.08);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  border-radius: var(--radius-sm);
+  color: var(--brand-rose);
+  font-size: 0.76rem;
+  font-weight: 600;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.timetable-scroll-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--card-glow);
+}
+.tt-grid-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 820px;
+}
+.tt-grid-table th {
+  background: var(--surface-raised);
+  padding: 10px 12px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  text-align: left;
+}
+.tt-grid-table th:last-child { border-right: none; }
+.tt-grid-table td {
+  padding: 6px;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  vertical-align: top;
+  min-width: 120px;
+  height: 68px;
+}
+.tt-grid-table td:last-child { border-right: none; }
+.tt-grid-table tbody tr:last-child td { border-bottom: none; }
+.tt-time-col-cell {
+  background: var(--surface-sunken);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  width: 88px;
+  min-width: 88px !important;
+  text-align: center;
+  vertical-align: middle !important;
+}
+
+.tt-item-card {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--brand-blue);
+  border-radius: var(--radius-xs);
+  padding: 5px 7px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.tt-item-card:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+}
+.tt-item-card.is-clash {
+  border-color: var(--brand-rose);
+  background: rgba(244, 63, 94, 0.08);
+}
+.tt-item-dept {
+  font-size: 0.65rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--brand-blue);
+  margin-bottom: 1px;
+}
+.tt-item-name {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tt-item-venue {
+  font-size: 0.66rem;
+  color: var(--text-muted);
+}
+
+/* ── COURSE DETAILS MODAL ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.modal-overlay.active {
+  display: flex;
+}
+.modal-window {
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--modal-shadow);
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+.modal-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+.modal-close-btn:hover {
+  background: var(--surface-hover);
+  color: var(--text-main);
+}
+.modal-body {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+}
+.modal-stat-box {
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+}
+.modal-stat-label {
+  font-size: 0.67rem;
+  color: var(--text-faint);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.modal-stat-value {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.modal-section-box {
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+.modal-section-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.modal-section-content {
+  font-size: 0.80rem;
+  color: var(--text-main);
+  line-height: 1.5;
+}
+
+.modal-actions-footer {
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-raised);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.btn-modal-action {
+  height: 34px;
+  padding: 0 14px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+}
+.btn-modal-primary {
+  background: var(--brand-blue);
+  border: 1px solid var(--brand-blue);
+  color: #ffffff;
+}
+.btn-modal-primary:hover {
+  background: var(--brand-blue-hover);
+}
+.btn-modal-secondary {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+}
+.btn-modal-secondary:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+}
+
+/* ── SEMESTER PLANNER DRAWER ("MY COURSES") ── */
+.planner-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  z-index: 110;
+  display: none;
+}
+.planner-drawer-overlay.open {
+  display: block;
+}
+.planner-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  max-width: 440px;
+  height: 100vh;
+  background: var(--surface);
+  border-left: 1px solid var(--border-strong);
+  box-shadow: var(--modal-shadow);
+  z-index: 115;
+  transform: translateX(100%);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+.planner-drawer.open {
+  transform: translateX(0);
+}
+.planner-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.planner-body {
+  padding: 16px 20px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.planner-stat-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  text-align: center;
+}
+.planner-stat-num {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+.planner-stat-text {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.planner-clash-alert {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: rgba(244, 63, 94, 0.08);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  color: var(--brand-rose);
+  font-size: 0.76rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.planner-clean-alert {
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--brand-emerald);
+  font-size: 0.74rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.planner-course-item {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+}
+.planner-course-item:hover {
+  border-color: var(--border-strong);
+}
+.planner-course-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.planner-course-code {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.80rem;
+  color: var(--brand-blue);
+}
+.planner-course-remove {
+  background: transparent;
+  border: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  padding: 2px;
+}
+.planner-course-remove:hover {
+  color: var(--brand-rose);
+}
+.planner-course-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.3;
+}
+.planner-course-meta {
+  font-size: 0.70rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.planner-footer {
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-raised);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── MOBILE BOTTOM SHEET (FILTERS) ── */
+.mobile-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: none;
+}
+.mobile-sheet-overlay.open {
+  display: block;
+}
+.mobile-bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 80vh;
+  background: var(--surface);
+  border-top: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  box-shadow: var(--modal-shadow);
+  z-index: 105;
+  transform: translateY(100%);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  padding: 16px 20px 28px;
+  overflow-y: auto;
+}
+.mobile-bottom-sheet.open {
+  transform: translateY(0);
+}
+
+/* ── VECTOR TOAST SYSTEM ── */
+#toast-shelf {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+.toast-msg {
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  border-radius: var(--radius-sm);
+  padding: 9px 14px;
+  color: var(--text-main);
+  font-size: 0.78rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: auto;
+  animation: toastIn 0.2s ease-out;
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── RESPONSIVE MEDIA QUERIES ── */
+
+/* ── TABLET (≤992px) ── */
+@media (max-width: 992px) {
+  .app-layout { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .btn-mobile-filter { display: inline-flex; }
+  #btnDesktopSidebarToggle { display: none; }
+  #btnToolbarExpandSidebar { display: none !important; }
+
+  /* Looser card grid on tablet */
+  #cards-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+}
+
+/* ── MOBILE (≤640px) ── */
+@media (max-width: 640px) {
+  /* ── Root adjustments ── */
+  :root {
+    --header-h: 52px;
+    font-size: 14px;
+  }
+
+  /* ── Scrolling fix ── */
+  html, body { overflow-x: hidden; }
+
+  /* ── Header: compact, no overflow ── */
+  .app-header {
+    padding: 0 10px;
+    gap: 8px;
+    height: var(--header-h);
+  }
+  .brand-subtitle { display: none; }
+  .brand-logo-badge { width: 26px; height: 26px; }
+  .brand-title { font-size: 0.82rem; }
+
+  /* Search bar takes full available space */
+  .search-center-box { min-width: 0; }
+  .search-input-field {
+    height: 34px;
+    font-size: 0.80rem;
+    padding: 0 8px 0 32px;
+  }
+  .search-kbd-indicator { display: none; }
+
+  /* Touch-friendly header buttons (44px min touch target) */
+  .btn-icon { width: 36px; height: 36px; }
+  .btn-planner-header { height: 34px; padding: 0 10px; font-size: 0.75rem; }
+  .btn-mobile-filter { height: 34px; padding: 0 8px; font-size: 0.75rem; }
+
+  /* Hide text labels in header that clutter small screens */
+  .btn-planner-header span:not(.planner-counter-badge) { display: none; }
+
+  /* ── Content area ── */
+  .content-area {
+    padding: 10px 10px 80px; /* bottom padding for mobile nav UX */
+  }
+
+  /* ── Toolbar ── */
+  .toolbar-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .toolbar-stats { gap: 6px; }
+  .stat-pill { font-size: 0.76rem; padding: 3px 8px; }
+  .view-mode-group {
+    width: 100%;
+    justify-content: stretch;
+  }
+  .view-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 0 6px;
+    height: 32px;
+    font-size: 0.72rem;
+    gap: 4px;
+  }
+
+  /* ── Active filter chips ── */
+  .active-filters-bar {
+    padding: 6px 10px;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+  .filter-chip { font-size: 0.70rem; padding: 3px 7px; }
+
+  /* ── Cards: single column, tighter padding ── */
+  #cards-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .card-top { padding: 12px 12px 0; }
+  .card-sessions-container { padding: 0 12px; }
+  .card-bottom-footer { padding: 8px 12px; }
+  .course-title-text { font-size: 0.86rem; }
+
+  /* ── Timetable: horizontal scroll with snap ── */
+  .timetable-scroll-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+  .tt-grid-table { min-width: 700px; }
+  .tt-elevated-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+  .tt-scope-selector { align-self: stretch; }
+  .tt-scope-btn { flex: 1; justify-content: center; }
+  .tt-clash-warning-bar { font-size: 0.72rem; }
+
+  /* ── Modal: full screen bottom sheet on mobile ── */
+  .modal-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+  .modal-window {
+    max-width: 100%;
+    max-height: 92vh;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    border-bottom: none;
+  }
+  .modal-header { padding: 14px 16px; }
+  .modal-body { padding: 14px 16px; gap: 12px; }
+  .modal-actions-footer {
+    padding: 12px 16px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+    gap: 8px;
+  }
+  .btn-modal-action { height: 40px; font-size: 0.80rem; } /* bigger touch targets */
+
+  /* ── Planner drawer: full width ── */
+  .planner-drawer {
+    max-width: 100%;
+    border-left: none;
+    border-top: 1px solid var(--border-strong);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    top: auto;
+    bottom: 0;
+    height: 90vh;
+    transform: translateY(100%);
+  }
+  .planner-drawer.open { transform: translateY(0); }
+  .planner-header { padding: 14px 16px; }
+  .planner-body { padding: 12px 16px; }
+  .planner-footer {
+    padding: 12px 16px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+
+  /* ── Mobile bottom sheet (filters) ── */
+  .mobile-bottom-sheet {
+    max-height: 85vh;
+    padding: 14px 16px;
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+
+  /* ── Toast: full width at bottom ── */
+  #toast-shelf {
+    bottom: 16px;
+    right: 12px;
+    left: 12px;
+  }
+  .toast-msg { font-size: 0.76rem; width: 100%; justify-content: center; }
+
+  /* ── Modal stat grid: 2-col on mobile ── */
+  .modal-stat-grid { grid-template-columns: 1fr 1fr; }
+
+  /* ── Day buttons: ensure tap area ── */
+  .day-toggle-btn { height: 34px; font-size: 0.70rem; }
+
+  /* ── Planner stat bar: horizontal scroll if needed ── */
+  .planner-stat-bar { grid-template-columns: repeat(3, 1fr); }
+  .planner-stat-num { font-size: 1rem; }
+}
+
+/* ── SMALL MOBILE (≤380px) ── */
+@media (max-width: 380px) {
+  .brand-logo-badge { display: none; } /* save space on very small screens */
+  .brand-title { font-size: 0.78rem; }
+  .search-input-field { font-size: 0.76rem; }
+  #cards-grid { gap: 8px; }
+  .view-btn { font-size: 0.68rem; gap: 3px; }
+  /* Show icon only in view buttons to save space */
+  .view-btn span.view-label { display: none; }
+  .tt-grid-table { min-width: 600px; }
+  .modal-stat-grid { grid-template-columns: 1fr; }
+}
+
+/* ── SAFE AREA for notched phones (iPhone X+, Android notch) ── */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .content-area {
+    padding-bottom: calc(40px + env(safe-area-inset-bottom));
+  }
+  #toast-shelf {
+    bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+}
+
+/* ── PRINT STYLES ── */
+@media print {
+  .app-header, .sidebar, .toolbar-header,
+  .active-filters-bar, .btn-mobile-filter,
+  #toast-shelf, .modal-overlay,
+  .planner-drawer, .mobile-bottom-sheet { display: none !important; }
+  .content-area { padding: 0; }
+  #cards-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .course-card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════ SVG VECTOR ICON DEFINITIONS ════════════ -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none;" aria-hidden="true">
+  <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+  <symbol id="icon-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+  <symbol id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+  <symbol id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></symbol>
+  <symbol id="icon-filter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></symbol>
+  <symbol id="icon-panel-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></symbol>
+  <symbol id="icon-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+  <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></symbol>
+  <symbol id="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+  <symbol id="icon-map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+  <symbol id="icon-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></symbol>
+  <symbol id="icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></symbol>
+  <symbol id="icon-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></symbol>
+  <symbol id="icon-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></symbol>
+  <symbol id="icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></symbol>
+  <symbol id="icon-printer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></symbol>
+  <symbol id="icon-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></symbol>
+  <symbol id="icon-rotate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></symbol>
+  <symbol id="icon-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></symbol>
+</svg>
+
+<!-- ════════════ HEADER ════════════ -->
+<header class="app-header">
+  <div class="brand-section">
+    <button class="btn-icon" id="btnDesktopSidebarToggle" onclick="toggleSidebarCollapse()" title="Toggle Sidebar (⌘B / Ctrl+B)">
+      <svg class="v-icon"><use href="#icon-panel-left"/></svg>
+    </button>
+    <div class="brand-logo-badge">
+      <svg class="v-icon" style="width:16px;height:16px;"><use href="#icon-layers"/></svg>
+    </div>
+    <div class="brand-text-block">
+      <div class="brand-title">IITK Course Portal</div>
+      <div class="brand-subtitle">Semester Schedule & Planner</div>
+    </div>
+  </div>
+
+  <div class="search-center-box">
+    <div class="search-icon-wrapper">
+      <svg class="v-icon"><use href="#icon-search"/></svg>
+    </div>
+    <input type="search" id="globalSearchInput" class="search-input-field" placeholder="Search code, title, faculty, or venue (e.g. L06, TB208)..." autocomplete="off" spellcheck="false">
+    <div class="search-kbd-indicator">
+      <span class="kbd-badge">/</span>
+    </div>
+  </div>
+
+  <div class="header-actions">
+    <button class="btn-planner-header" id="btnHeaderPlanner" onclick="openPlannerDrawer()" title="View Planned Courses & Clash Detector">
+      <svg class="v-icon" style="color: var(--brand-amber);"><use href="#icon-star"/></svg>
+      <span>My Courses</span>
+      <span class="planner-counter-badge" id="headerPlannerCount">0</span>
+    </button>
+
+    <button class="btn-icon" id="btnThemeToggle" onclick="toggleTheme()" title="Toggle Dark / Light Theme">
+      <svg class="v-icon" id="themeIconSun"><use href="#icon-sun"/></svg>
+      <svg class="v-icon" id="themeIconMoon" style="display: none;"><use href="#icon-moon"/></svg>
+    </button>
+
+    <button class="btn-mobile-filter" onclick="openMobileFilters()">
+      <svg class="v-icon"><use href="#icon-filter"/></svg>
+      <span>Filters</span>
+      <span class="planner-counter-badge" id="mobileFilterCount">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- ════════════ MAIN LAYOUT ════════════ -->
+<div class="app-layout" id="mainAppLayout">
+
+  <!-- Desktop Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header-bar">
+      <div class="sidebar-title-label">
+        <svg class="v-icon"><use href="#icon-filter"/></svg>
+        <span>Catalog Filters</span>
+      </div>
+      <button class="btn-icon" style="width: 26px; height: 26px;" onclick="toggleSidebarCollapse()" title="Collapse Sidebar (⌘B / Ctrl+B)">
+        <svg class="v-icon" style="width:12px;height:12px;"><use href="#icon-x"/></svg>
+      </button>
+    </div>
+    <div id="desktopFilterContainer"></div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="content-area">
+
+    <!-- Top Toolbar -->
+    <div class="toolbar-header">
+      <div class="toolbar-stats">
+        <button class="btn-toolbar-expand-sidebar" id="btnToolbarExpandSidebar" onclick="toggleSidebarCollapse()" title="Expand Filters Sidebar (⌘B / Ctrl+B)">
+          <svg class="v-icon"><use href="#icon-panel-left"/></svg>
+          <span>Filters</span>
+        </button>
+
+        <div class="stat-pill">
+          <span id="resultsCountDisplay">0</span>
+          <span id="resultsCountLabel">courses</span>
+        </div>
+      </div>
+
+      <!-- View Selector -->
+      <div class="view-mode-group">
+        <button class="view-btn active" id="btnModeGrid" onclick="switchView('grid')" title="Card Grid View">
+          <svg class="v-icon"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span class="view-label">Cards</span>
+        </button>
+        <button class="view-btn" id="btnModeList" onclick="switchView('list')" title="Compact List View">
+          <svg class="v-icon"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          <span class="view-label">List</span>
+        </button>
+        <button class="view-btn" id="btnModeTimetable" onclick="switchView('timetable')" title="Elevated Semester Timetable View">
+          <svg class="v-icon"><use href="#icon-calendar"/></svg>
+          <span class="view-label">Timetable</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Filter Chips Bar -->
+    <div class="active-filters-bar" id="activeFiltersBar" style="display: none;">
+      <span class="active-filters-title">Active:</span>
+      <div id="activeChipsList" style="display: flex; flex-wrap: wrap; gap: 5px;"></div>
+      <button class="btn-clear-all-chips" onclick="resetAllFilters()">Clear all</button>
+    </div>
+
+    <!-- Loading State -->
+    <div id="initialLoadingState" style="text-align: center; padding: 100px 20px;">
+      <div style="display:inline-block; width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--brand-blue); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 14px;"></div>
+      <div style="font-size: 0.88rem; color: var(--text-muted); font-weight: 500;">Loading IIT Kanpur course schedule...</div>
+    </div>
+    <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+
+    <!-- Cards / List Grid Container -->
+    <div id="cards-grid" style="display: none;"></div>
+
+    <!-- Elevated Timetable Container -->
+    <div id="timetable-view-container">
+      <div class="tt-elevated-header">
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <div class="tt-scope-selector">
+            <button class="tt-scope-btn active" id="btnTtScopeAll" onclick="setTimetableScope('all')">
+              <span>All Matching Courses</span>
+              <span class="kbd-badge" id="ttCountAll">0</span>
+            </button>
+            <button class="tt-scope-btn" id="btnTtScopePlanner" onclick="setTimetableScope('planner')">
+              <svg class="v-icon" style="color: var(--brand-amber);"><use href="#icon-star"/></svg>
+              <span>My Planned Courses</span>
+              <span class="kbd-badge" id="ttCountPlanner">0</span>
+            </button>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button class="btn-icon" onclick="window.print()" title="Print / PDF Semester Schedule" style="width: auto; padding: 0 10px; gap: 6px; font-size: 0.76rem; font-family: var(--font-sans); font-weight: 600;">
+            <svg class="v-icon"><use href="#icon-printer"/></svg>
+            <span>Print Timetable</span>
+          </button>
+        </div>
+
+        <div class="tt-clash-warning-bar" id="ttClashWarningBar">
+          <svg class="v-icon"><use href="#icon-alert"/></svg>
+          <span id="ttClashWarningText">Schedule Clash Detected</span>
+        </div>
+      </div>
+
+      <div id="timetableGridTarget"></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ════════════ MOBILE BOTTOM SHEET (DRAWER) ════════════ -->
+<div class="mobile-sheet-overlay" id="mobileSheetOverlay" onclick="closeMobileFilters()"></div>
+<div class="mobile-bottom-sheet" id="mobileBottomSheet">
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border);">
+    <div style="font-size: 0.94rem; font-weight: 700;">Filter Specifications</div>
+    <button class="btn-icon" onclick="closeMobileFilters()" style="width: 30px; height: 30px;">
+      <svg class="v-icon"><use href="#icon-x"/></svg>
+    </button>
+  </div>
+  <div id="mobileFilterContainer"></div>
+</div>
+
+<!-- ════════════ COURSE DETAILS MODAL DOSSIER ════════════ -->
+<div class="modal-overlay" id="courseDetailModal" onclick="handleModalBackdropClick(event)">
+  <div class="modal-window">
+    <div class="modal-header">
+      <div>
+        <div id="modalCourseDept" class="dept-pill" style="display: inline-block; margin-bottom: 6px;"></div>
+        <h2 id="modalCourseTitle" style="font-size: 1.15rem; font-weight: 800; line-height: 1.3;"></h2>
+        <div id="modalCourseCode" style="font-family: var(--font-mono); font-weight: 700; color: var(--brand-blue); font-size: 0.85rem; margin-top: 4px;"></div>
+      </div>
+      <button class="modal-close-btn" onclick="closeCourseModal()" title="Close (Escape)">
+        <svg class="v-icon"><use href="#icon-x"/></svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <!-- 4 Quick Stats -->
+      <div class="modal-stat-grid">
+        <div class="modal-stat-box">
+          <div class="modal-stat-label">Estimated Credits</div>
+          <div class="modal-stat-value" id="modalCreditsVal">9 Credits</div>
+        </div>
+        <div class="modal-stat-box">
+          <div class="modal-stat-label">Academic Level</div>
+          <div class="modal-stat-value" id="modalLevelVal">Undergraduate</div>
+        </div>
+        <div class="modal-stat-box">
+          <div class="modal-stat-label">Schedule Slot</div>
+          <div class="modal-stat-value" id="modalSlotVal">—</div>
+        </div>
+        <div class="modal-stat-box">
+          <div class="modal-stat-label">Handout Document</div>
+          <div class="modal-stat-value" id="modalFchVal">Pending</div>
+        </div>
+      </div>
+
+      <!-- Clash Warning if conflicting with planner -->
+      <div id="modalClashBox" style="display: none;" class="planner-clash-alert">
+        <svg class="v-icon"><use href="#icon-alert"/></svg>
+        <span id="modalClashText">Schedule conflict with your planned courses</span>
+      </div>
+
+      <!-- Prerequisites -->
+      <div class="modal-section-box">
+        <div class="modal-section-title">
+          <svg class="v-icon"><use href="#icon-layers"/></svg>
+          <span>Prerequisites & Eligibility</span>
+        </div>
+        <div class="modal-section-content" id="modalPrereqText"></div>
+      </div>
+
+      <!-- Course Description / Syllabus -->
+      <div class="modal-section-box">
+        <div class="modal-section-title">
+          <svg class="v-icon"><use href="#icon-book"/></svg>
+          <span>Course Description & Core Concepts</span>
+        </div>
+        <div class="modal-section-content" id="modalDescriptionText"></div>
+      </div>
+
+      <!-- Faculty Info -->
+      <div class="modal-section-box">
+        <div class="modal-section-title">
+          <svg class="v-icon"><use href="#icon-user"/></svg>
+          <span>Faculty & Instruction Team</span>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+          <div>
+            <div id="modalInstructorName" style="font-weight: 700; font-size: 0.88rem; color: var(--text-main);"></div>
+            <div id="modalInstructorEmail" style="font-size: 0.76rem; color: var(--text-muted); font-family: var(--font-mono);"></div>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <a id="modalMailLink" href="#" class="btn-modal-action btn-modal-secondary" style="text-decoration: none; height: 30px; font-size: 0.74rem;">
+              <svg class="v-icon"><use href="#icon-mail"/></svg>
+              <span>Email Instructor</span>
+            </a>
+            <button id="modalFilterFacultyBtn" class="btn-modal-action btn-modal-secondary" style="height: 30px; font-size: 0.74rem;">
+              <svg class="v-icon"><use href="#icon-search"/></svg>
+              <span>Faculty Courses</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Meeting Sessions -->
+      <div class="modal-section-box">
+        <div class="modal-section-title">
+          <svg class="v-icon"><use href="#icon-clock"/></svg>
+          <span>Meeting Times & Venues</span>
+        </div>
+        <div id="modalSessionsList" style="display: flex; flex-direction: column; gap: 6px;"></div>
+      </div>
+    </div>
+
+    <div class="modal-actions-footer">
+      <button class="btn-modal-action btn-modal-secondary" id="modalWebSearchBtn">
+        <svg class="v-icon"><use href="#icon-external"/></svg>
+        <span>Search Syllabus Web</span>
+      </button>
+      <button class="btn-modal-action btn-modal-secondary" id="modalCopySummaryBtn">
+        <svg class="v-icon"><use href="#icon-copy"/></svg>
+        <span>Copy Details</span>
+      </button>
+      <button class="btn-modal-action btn-modal-primary" id="modalStarBtn">
+        <svg class="v-icon"><use href="#icon-star"/></svg>
+        <span id="modalStarBtnLabel">Add to My Courses</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ SEMESTER PLANNER DRAWER ════════════ -->
+<div class="planner-drawer-overlay" id="plannerDrawerOverlay" onclick="closePlannerDrawer()"></div>
+<div class="planner-drawer" id="plannerDrawer">
+  <div class="planner-header">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <svg class="v-icon" style="color: var(--brand-amber); width: 18px; height: 18px;"><use href="#icon-star"/></svg>
+      <div>
+        <div style="font-size: 0.94rem; font-weight: 800;">Semester Course Planner</div>
+        <div style="font-size: 0.70rem; color: var(--text-muted);">Organize schedule & prevent timetable clashes</div>
+      </div>
+    </div>
+    <button class="btn-icon" onclick="closePlannerDrawer()" style="width: 28px; height: 28px;">
+      <svg class="v-icon"><use href="#icon-x"/></svg>
+    </button>
+  </div>
+
+  <div class="planner-body">
+    <!-- Planner Metrics -->
+    <div class="planner-stat-bar">
+      <div>
+        <div class="planner-stat-num" id="plannerStatCount">0</div>
+        <div class="planner-stat-text">Courses</div>
+      </div>
+      <div>
+        <div class="planner-stat-num" id="plannerStatCredits">0</div>
+        <div class="planner-stat-text">Est. Credits</div>
+      </div>
+      <div>
+        <div class="planner-stat-num" id="plannerStatHours">0</div>
+        <div class="planner-stat-text">Hrs / Week</div>
+      </div>
+    </div>
+
+    <!-- Clash status banner -->
+    <div id="plannerClashBanner"></div>
+
+    <!-- Planned courses list -->
+    <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin-top: 4px;">
+      Planned Courses List
+    </div>
+    <div id="plannerCoursesList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+  </div>
+
+  <div class="planner-footer">
+    <button class="btn-modal-action btn-modal-primary" onclick="viewPlannerInTimetable()" style="justify-content: center;">
+      <svg class="v-icon"><use href="#icon-calendar"/></svg>
+      <span>View Planned Schedule in Timetable</span>
+    </button>
+    <div style="display: flex; gap: 8px;">
+      <button class="btn-modal-action btn-modal-secondary" onclick="copyPlannerSchedule()" style="flex: 1; justify-content: center;">
+        <svg class="v-icon"><use href="#icon-copy"/></svg>
+        <span>Copy Schedule</span>
+      </button>
+      <button class="btn-modal-action btn-modal-secondary" onclick="clearAllPlannedCourses()" style="color: var(--brand-rose); border-color: rgba(244,63,94,0.3); justify-content: center;" title="Clear Planner">
+        <svg class="v-icon"><use href="#icon-trash"/></svg>
+        <span>Clear</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ VECTOR TOAST SHELF ════════════ -->
+<div id="toast-shelf"></div>
+
+<!-- ════════════ APPLICATION LOGIC ════════════ -->
+<script>
+const CSV_DATA_FILE = 'Course Schedule 2019-202 Semester(Pre-Registration) - Sheet1.csv';
+const ALL_DAYS_LIST = ['M', 'T', 'W', 'Th', 'F', 'Sa'];
+const DAY_EXPANSIONS = { M: 'Mon', T: 'Tue', W: 'Wed', Th: 'Thu', F: 'Fri', Sa: 'Sat' };
+const DAY_LONG_NAMES = { M: 'Monday', T: 'Tuesday', W: 'Wednesday', Th: 'Thursday', F: 'Friday', Sa: 'Saturday' };
+
+// Department Colors
+const DEPARTMENT_PALETTES = [
+  { bg: 'rgba(59, 130, 246, 0.14)', fg: '#60a5fa' },
+  { bg: 'rgba(16, 185, 129, 0.14)', fg: '#34d399' },
+  { bg: 'rgba(245, 158, 11, 0.14)', fg: '#fbbf24' },
+  { bg: 'rgba(168, 85, 247, 0.14)', fg: '#c084fc' },
+  { bg: 'rgba(236, 72, 153, 0.14)', fg: '#f472b6' },
+  { bg: 'rgba(6, 182, 212, 0.14)', fg: '#22d3ee' },
+  { bg: 'rgba(249, 115, 22, 0.14)', fg: '#fb923c' },
+  { bg: 'rgba(244, 63, 94, 0.14)', fg: '#fb7185' },
+  { bg: 'rgba(99, 102, 241, 0.14)', fg: '#818cf8' },
+  { bg: 'rgba(20, 184, 166, 0.14)', fg: '#2dd4bf' }
+];
+const deptColorCache = {};
+let colorIndex = 0;
+function getDepartmentColor(dept) {
+  if (!deptColorCache[dept]) {
+    deptColorCache[dept] = DEPARTMENT_PALETTES[colorIndex % DEPARTMENT_PALETTES.length];
+    colorIndex++;
+  }
+  return deptColorCache[dept];
+}
+
+// Global Application State
+let rawCoursesList = [];
+let filteredCoursesList = [];
+let activeViewMode = localStorage.getItem('nexus_view_mode') || 'grid';
+let activeSelectedDays = new Set(['ALL']);
+let activeSelectedType = '';
+let activeQuickFilter = 'ALL';
+let isShortlistOnlyMode = false;
+let timetableScope = 'all'; // 'all' | 'planner'
+let sidebarCollapsed = localStorage.getItem('nexus_sidebar') === 'collapsed';
+let shortlistedCodes = new Set(JSON.parse(localStorage.getItem('nexus_shortlisted') || '[]'));
+
+// ── CSV Parsing Engine ──
+function parseCSVLineRecord(line) {
+  const values = [];
+  let inQuotes = false;
+  let currentVal = '';
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      if (inQuotes && line[i + 1] === '"') {
+        currentVal += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (ch === ',' && !inQuotes) {
+      values.push(currentVal.trim());
+      currentVal = '';
+    } else {
+      currentVal += ch;
+    }
+  }
+  values.push(currentVal.trim());
+  return values;
+}
+
+function parseCSVDocument(text) {
+  return text.split(/\r?\n/).map(line => line.trim()).filter(Boolean).map(parseCSVLineRecord);
+}
+
+// ── Name normaliser: SANJAY MITTAL (I) → Sanjay Mittal (I) ──
+function toTitleCase(str) {
+  if (!str) return str;
+  // Small words that should stay lowercase (unless first word)
+  const lower = new Set(['of', 'the', 'and', 'an', 'a', 'de', 'van', 'von', 'bin', 'binti']);
+  return str
+    .split(/(\s+)/)                      // split on whitespace, keep delimiters
+    .map((token, idx) => {
+      // Pass through whitespace tokens unchanged
+      if (/^\s+$/.test(token)) return token;
+      // Keep parenthetical roman numerals / letters as-is: (I), (II), (III), (IV)
+      if (/^\([IVXivx]+\)$/.test(token)) return token.toUpperCase();
+      // Title-case each hyphenated segment
+      return token
+        .split('-')
+        .map((seg, si) => {
+          const low = seg.toLowerCase();
+          // First word always capitalised; small words lowercase inside
+          if (idx === 0 || si > 0 || !lower.has(low)) {
+            return low.charAt(0).toUpperCase() + low.slice(1);
+          }
+          return low;
+        })
+        .join('-');
+    })
+    .join('');
+}
+
+function parseDaysString(str) {
+  if (!str) return [];
+  const days = [];
+  if (str.includes('Th')) {
+    days.push('Th');
+    str = str.replace(/Th/g, '');
+  }
+  if (str.includes('Sa')) {
+    days.push('Sa');
+    str = str.replace(/Sa/g, '');
+  }
+  for (const ch of str) {
+    if (['M', 'T', 'W', 'F'].includes(ch)) days.push(ch);
+  }
+  return [...new Set(days)];
+}
+
+function parseScheduleSessions(timeStr, fallbackVenue) {
+  if (!timeStr || !timeStr.trim()) return [];
+  const sessions = [];
+  const parts = timeStr.split(/\s*,\s*(?=[MTWFSThu])/);
+  for (const part of parts) {
+    const p = part.trim();
+    if (!p) continue;
+    const match = p.match(/(\d{1,2}:\d{2})-(\d{1,2}:\d{2})/);
+    if (!match) continue;
+    const venueMatches = [...p.matchAll(/\(([^)]+)\)/g)].map(x => x[1].trim());
+    const venue = venueMatches.length > 0 ? venueMatches[0] : (fallbackVenue || '');
+    const days = parseDaysString(p.substring(0, match.index).trim());
+    sessions.push({
+      days,
+      timeRange: match[0],
+      startTime: match[1],
+      endTime: match[2],
+      venue: venue
+    });
+  }
+  return sessions;
+}
+
+function extractBuildingName(venue) {
+  if (!venue) return '';
+  venue = venue.trim();
+  const known = [
+    ['AE:', 'AE Building'], ['BSBE:', 'BSBE Building'], ['CHE:', 'CHE Building'],
+    ['ChE:', 'CHE Building'], ['CHM:', 'Chemistry Building'], ['CS:', 'CSE / KD Building'],
+    ['CSE:', 'CSE / KD Building'], ['ECO:', 'Economics Building'], ['EE:', 'EE Building'],
+    ['ES:', 'Earth Sciences'], ['HSS:', 'HSS Building'], ['IME:', 'IME Building'],
+    ['MATH:', 'Maths Building'], ['ME:', 'ME Building'], ['MSE:', 'MSE Building'],
+    ['PHY:', 'Physics Building'], ['MB', 'Main Building'], ['NB', 'New Core Labs']
+  ];
+  for (const [prefix, label] of known) {
+    if (venue.startsWith(prefix)) return label;
+  }
+  if (/^L\d+/i.test(venue)) return 'Lecture Hall Complex (L)';
+  if (/^EEM/i.test(venue)) return 'EEM Complex';
+  if (/^TB/i.test(venue)) return 'Tutorial Block (TB)';
+  if (/^FB/i.test(venue)) return 'Faculty Building (FB)';
+  if (/^SL/i.test(venue)) return 'Southern Laboratories (SL)';
+  if (/^KD/i.test(venue)) return 'KD Hall (Computer Centre)';
+  return venue.split(/[\s:,]/)[0] || venue;
+}
+
+function buildCourseSearchIndex(course) {
+  const venuesSet = new Set();
+  (course.venues || []).forEach(v => {
+    venuesSet.add(v);
+    const lMatch = v.match(/L0?(\d+)/i);
+    if (lMatch) {
+      const n = parseInt(lMatch[1], 10);
+      venuesSet.add('l' + n);
+      venuesSet.add('l0' + n);
+      venuesSet.add('lh' + n);
+      venuesSet.add('lh0' + n);
+      venuesSet.add('lecture hall ' + n);
+    }
+    const tbMatch = v.match(/TB0?(\d+)/i);
+    if (tbMatch) {
+      const n = parseInt(tbMatch[1], 10);
+      venuesSet.add('tb' + n);
+      venuesSet.add('tb0' + n);
+      venuesSet.add('tutorial block ' + n);
+    }
+  });
+
+  const instructorClean = (course.instructor || '').replace(/\s*\([A-Z]\)/g, '').replace(/\s+/g, ' ').trim();
+  const emailClean = (course.email || '').replace(/\s*\([A-Z]\)/g, '').replace(/\s+/g, ' ').trim();
+
+  const allTokens = [
+    course.dept,
+    course.code,
+    course.name,
+    instructorClean,
+    emailClean,
+    course.slotName,
+    course.courseType,
+    ...(course.buildings || []),
+    ...Array.from(venuesSet)
+  ];
+
+  return allTokens.filter(Boolean).join(' ').toLowerCase();
+}
+
+function processCourseRecords(rows) {
+  const courses = [];
+  for (let i = 1; i < rows.length; i++) {
+    const r = rows[i];
+    if (r.length < 6 || !r[0]) continue;
+    const dept = r[0].trim();
+    const rawName = r[1].trim();
+    const slotCourseType = r[2].trim();
+    const instructor = toTitleCase(r[3].trim());
+    const email = r[4].trim();
+    const t1 = r[5] || '', v1 = r[6] || '';
+    const t2 = r[7] || '', v2 = r[8] || '';
+    const t3 = r[9] || '', v3 = r[10] || '';
+    const fch = r[11] || '';
+
+    const codeMatch = rawName.match(/\(([A-Z0-9]+)\)$/);
+    const code = codeMatch ? codeMatch[1] : '';
+    const name = rawName.replace(/\([^)]*\)$/, '').trim();
+
+    let sessions = [];
+    if (t1) sessions = sessions.concat(parseScheduleSessions(t1, v1));
+    if (t2) sessions = sessions.concat(parseScheduleSessions(t2, v2));
+    if (t3) sessions = sessions.concat(parseScheduleSessions(t3, v3));
+
+    const venues = [...new Set(sessions.map(s => s.venue).filter(Boolean).concat([v1, v2, v3].filter(Boolean)))];
+    const days = [...new Set(sessions.flatMap(s => s.days))];
+    const buildings = [...new Set(venues.map(extractBuildingName).filter(Boolean))];
+
+    const slotParts = slotCourseType.split('/');
+    const slotName = slotParts[0].trim();
+    const courseType = slotParts[1] ? slotParts[1].trim() : '';
+
+    const courseObj = {
+      id: 'crs_' + i,
+      dept,
+      name,
+      code,
+      slotName,
+      courseType,
+      instructor,
+      email,
+      sessions,
+      venues,
+      days,
+      buildings,
+      hasHandout: fch === 'FCH Document'
+    };
+
+    courseObj._searchHaystack = buildCourseSearchIndex(courseObj);
+    courses.push(courseObj);
+  }
+  return courses;
+}
+
+// ── Toast Notification System ──
+function showToast(msg, iconId = 'icon-check') {
+  const shelf = document.getElementById('toast-shelf');
+  if (!shelf) return;
+  const toast = document.createElement('div');
+  toast.className = 'toast-msg';
+  toast.innerHTML = `
+    <svg class="v-icon" style="color: var(--brand-blue);"><use href="#${iconId}"/></svg>
+    <span>${msg}</span>
+  `;
+  shelf.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(6px)';
+    toast.style.transition = 'all 0.2s ease';
+    setTimeout(() => toast.remove(), 200);
+  }, 2400);
+}
+
+// ── Planner & Shortlist Engine ──
+function toggleShortlist(code, e) {
+  if (e) e.stopPropagation();
+  if (shortlistedCodes.has(code)) {
+    shortlistedCodes.delete(code);
+    showToast(`${code} removed from My Courses`, 'icon-trash');
+  } else {
+    shortlistedCodes.add(code);
+    showToast(`${code} added to My Courses`, 'icon-star');
+  }
+  localStorage.setItem('nexus_shortlisted', JSON.stringify([...shortlistedCodes]));
+  updatePlannerUI();
+  applyFiltersAndRender();
+}
+
+function updatePlannerUI() {
+  const count = shortlistedCodes.size;
+  document.getElementById('headerPlannerCount').textContent = count;
+  const headerBtn = document.getElementById('btnHeaderPlanner');
+  if (headerBtn) headerBtn.classList.toggle('has-courses', count > 0);
+
+  const ttCount = document.getElementById('ttCountPlanner');
+  if (ttCount) ttCount.textContent = count;
+
+  renderPlannerDrawerContents();
+}
+
+// ── Collapsible Sidebar Engine (Desktop ⌘B & Mobile Drawer) ──
+function toggleSidebarCollapse() {
+  sidebarCollapsed = !sidebarCollapsed;
+  localStorage.setItem('nexus_sidebar', sidebarCollapsed ? 'collapsed' : 'open');
+  const layout = document.getElementById('mainAppLayout');
+  if (layout) layout.classList.toggle('sidebar-collapsed', sidebarCollapsed);
+
+  const btnToggle = document.getElementById('btnDesktopSidebarToggle');
+  if (btnToggle) btnToggle.classList.toggle('active', sidebarCollapsed);
+
+  const btnExpand = document.getElementById('btnToolbarExpandSidebar');
+  if (btnExpand) btnExpand.style.display = sidebarCollapsed ? 'inline-flex' : 'none';
+}
+
+function openMobileFilters() {
+  document.getElementById('mobileSheetOverlay').classList.add('open');
+  document.getElementById('mobileBottomSheet').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMobileFilters() {
+  document.getElementById('mobileSheetOverlay').classList.remove('open');
+  document.getElementById('mobileBottomSheet').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── Filter State & Multi-Token Match ──
+function getCurrentFilters() {
+  const searchInput = document.getElementById('globalSearchInput');
+  const deptSelect = document.getElementById('filterDeptSelect');
+  const slotSelect = document.getElementById('filterSlotSelect');
+  const buildingSelect = document.getElementById('filterBuildingSelect');
+  const fromInput = document.getElementById('filterTimeFrom');
+  const toInput = document.getElementById('filterTimeTo');
+
+  return {
+    search: searchInput ? searchInput.value.trim() : '',
+    dept: deptSelect ? deptSelect.value : '',
+    slot: slotSelect ? slotSelect.value : '',
+    building: buildingSelect ? buildingSelect.value : '',
+    timeFrom: fromInput ? fromInput.value : '',
+    timeTo: toInput ? toInput.value : '',
+    type: activeSelectedType,
+    days: activeSelectedDays,
+    quick: activeQuickFilter,
+    shortlistOnly: isShortlistOnlyMode
+  };
+}
+
+function doesCourseMatchFilters(course, f) {
+  if (f.shortlistOnly && !shortlistedCodes.has(course.code)) return false;
+
+  if (f.search) {
+    const rawWords = f.search.toLowerCase().replace(/\s+/g, ' ').split(' ').filter(Boolean);
+    const haystack = course._searchHaystack;
+
+    const matchesAllWords = rawWords.every(word => {
+      const lMatch = word.match(/^l[-_]?0?(\d+)$/i);
+      if (lMatch) {
+        const n = parseInt(lMatch[1], 10);
+        return haystack.includes('l' + n) || haystack.includes('l0' + n) || haystack.includes('lh' + n);
+      }
+      const tbMatch = word.match(/^tb[-_]?0?(\d+)$/i);
+      if (tbMatch) {
+        const n = parseInt(tbMatch[1], 10);
+        return haystack.includes('tb' + n) || haystack.includes('tb0' + n);
+      }
+      return haystack.includes(word);
+    });
+
+    if (!matchesAllWords) return false;
+  }
+
+  if (f.dept && course.dept !== f.dept) return false;
+  if (f.slot && !course.slotName.includes(f.slot)) return false;
+  if (f.building && !course.buildings.includes(f.building)) return false;
+  if (f.type && !course.slotName.includes(f.type)) return false;
+
+  if (!f.days.has('ALL') && f.days.size > 0) {
+    if (!course.days.some(d => f.days.has(d))) return false;
+  }
+
+  if (f.timeFrom || f.timeTo) {
+    const fromVal = f.timeFrom || '00:00';
+    const toVal = f.timeTo || '23:59';
+    if (!course.sessions.some(s => s.startTime <= toVal && s.endTime >= fromVal)) return false;
+  }
+
+  if (f.quick === 'MORNING') {
+    if (!course.sessions.some(s => s.startTime < '12:00')) return false;
+  } else if (f.quick === 'AFTERNOON') {
+    if (!course.sessions.some(s => s.startTime >= '12:00' && s.startTime < '17:00')) return false;
+  } else if (f.quick === 'EVENING') {
+    if (!course.sessions.some(s => s.startTime >= '17:00')) return false;
+  } else if (f.quick === 'HANDOUT') {
+    if (!course.hasHandout) return false;
+  } else if (f.quick === 'LECTURE_HALL') {
+    if (!course.venues.some(v => /^L\d+/i.test(v))) return false;
+  }
+
+  return true;
+}
+
+function savePersistentFilterState() {
+  const f = getCurrentFilters();
+  const serialized = {
+    search: f.search,
+    dept: f.dept,
+    slot: f.slot,
+    building: f.building,
+    timeFrom: f.timeFrom,
+    timeTo: f.timeTo,
+    type: f.type,
+    days: Array.from(f.days),
+    quick: f.quick,
+    shortlistOnly: f.shortlistOnly
+  };
+  localStorage.setItem('nexus_filters', JSON.stringify(serialized));
+  localStorage.setItem('nexus_view_mode', activeViewMode);
+}
+
+function restorePersistentFilterState() {
+  try {
+    const savedStr = localStorage.getItem('nexus_filters');
+    if (!savedStr) return;
+    const s = JSON.parse(savedStr);
+
+    if (s.search) document.getElementById('globalSearchInput').value = s.search;
+    if (s.dept) {
+      const el = document.getElementById('filterDeptSelect');
+      if (el) el.value = s.dept;
+    }
+    if (s.slot) {
+      const el = document.getElementById('filterSlotSelect');
+      if (el) el.value = s.slot;
+    }
+    if (s.building) {
+      const el = document.getElementById('filterBuildingSelect');
+      if (el) el.value = s.building;
+    }
+    if (s.timeFrom) {
+      const el = document.getElementById('filterTimeFrom');
+      if (el) el.value = s.timeFrom;
+    }
+    if (s.timeTo) {
+      const el = document.getElementById('filterTimeTo');
+      if (el) el.value = s.timeTo;
+    }
+    if (s.type) activeSelectedType = s.type;
+    if (s.days && Array.isArray(s.days)) activeSelectedDays = new Set(s.days);
+    if (s.quick) activeQuickFilter = s.quick;
+    if (typeof s.shortlistOnly === 'boolean') isShortlistOnlyMode = s.shortlistOnly;
+  } catch (e) {
+    console.warn('Failed to restore filter state', e);
+  }
+}
+
+let filterDebounceTimer = null;
+function applyFiltersAndRender() {
+  clearTimeout(filterDebounceTimer);
+  filterDebounceTimer = setTimeout(() => {
+    const filters = getCurrentFilters();
+    filteredCoursesList = rawCoursesList.filter(c => doesCourseMatchFilters(c, filters));
+    syncInputsState();
+    renderActiveFilterChips();
+    savePersistentFilterState();
+    renderCurrentView();
+  }, 40);
+}
+
+function syncInputsState() {
+  ['filterDeptSelect', 'filterSlotSelect', 'filterBuildingSelect'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('has-val', Boolean(el.value));
+  });
+
+  const mobSelectIds = ['mobileDeptSelect', 'mobileSlotSelect', 'mobileBuildingSelect'];
+  mobSelectIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('has-val', Boolean(el.value));
+  });
+
+  document.querySelectorAll('.day-toggle-btn').forEach(btn => {
+    const d = btn.dataset.day;
+    btn.classList.toggle('active', activeSelectedDays.has(d));
+  });
+
+  document.querySelectorAll('.type-toggle-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.type === activeSelectedType);
+  });
+
+  let activeCount = 0;
+  const f = getCurrentFilters();
+  if (f.search) activeCount++;
+  if (f.dept) activeCount++;
+  if (f.slot) activeCount++;
+  if (f.building) activeCount++;
+  if (f.timeFrom || f.timeTo) activeCount++;
+  if (f.type) activeCount++;
+  if (!f.days.has('ALL')) activeCount++;
+  if (f.quick !== 'ALL') activeCount++;
+  if (f.shortlistOnly) activeCount++;
+
+  const mobBadge = document.getElementById('mobileFilterCount');
+  if (mobBadge) mobBadge.textContent = activeCount;
+}
+
+function renderActiveFilterChips() {
+  const bar = document.getElementById('activeFiltersBar');
+  const target = document.getElementById('activeChipsList');
+  if (!bar || !target) return;
+
+  const f = getCurrentFilters();
+  const chips = [];
+
+  if (f.search) {
+    chips.push({ label: `"${f.search}"`, clear: () => { document.getElementById('globalSearchInput').value = ''; } });
+  }
+  if (f.dept) {
+    chips.push({ label: `Dept: ${f.dept}`, clear: () => { const el = document.getElementById('filterDeptSelect'); if (el) el.value = ''; } });
+  }
+  if (f.slot) {
+    chips.push({ label: `Slot: ${f.slot}`, clear: () => { const el = document.getElementById('filterSlotSelect'); if (el) el.value = ''; } });
+  }
+  if (f.building) {
+    chips.push({ label: `Venue: ${f.building}`, clear: () => { const el = document.getElementById('filterBuildingSelect'); if (el) el.value = ''; } });
+  }
+  if (!f.days.has('ALL')) {
+    f.days.forEach(d => {
+      chips.push({ label: `Day: ${DAY_LONG_NAMES[d] || d}`, clear: () => {
+        activeSelectedDays.delete(d);
+        if (activeSelectedDays.size === 0) activeSelectedDays.add('ALL');
+      }});
+    });
+  }
+  if (f.type) {
+    chips.push({ label: `Type: ${f.type}`, clear: () => { activeSelectedType = ''; } });
+  }
+  if (f.timeFrom || f.timeTo) {
+    chips.push({ label: `Time: ${f.timeFrom || '00:00'} - ${f.timeTo || '23:59'}`, clear: () => {
+      const fIn = document.getElementById('filterTimeFrom'); if (fIn) fIn.value = '';
+      const tIn = document.getElementById('filterTimeTo'); if (tIn) tIn.value = '';
+    }});
+  }
+  if (f.shortlistOnly) {
+    chips.push({ label: `My Courses Only`, clear: () => { isShortlistOnlyMode = false; } });
+  }
+  if (f.quick !== 'ALL') {
+    chips.push({ label: `Quick: ${f.quick}`, clear: () => { activeQuickFilter = 'ALL'; } });
+  }
+
+  if (chips.length === 0) {
+    bar.style.display = 'none';
+    target.innerHTML = '';
+    return;
+  }
+
+  bar.style.display = 'flex';
+  target.innerHTML = chips.map((chip, idx) => `
+    <span class="filter-chip">
+      <span>${chip.label}</span>
+      <span class="filter-chip-remove" onclick="removeSingleChip(${idx})" title="Remove filter">
+        <svg class="v-icon" style="width:10px;height:10px;"><use href="#icon-x"/></svg>
+      </span>
+    </span>
+  `).join('');
+
+  window._activeChipsData = chips;
+}
+
+function removeSingleChip(idx) {
+  if (window._activeChipsData && window._activeChipsData[idx]) {
+    window._activeChipsData[idx].clear();
+    applyFiltersAndRender();
+  }
+}
+
+function resetAllFilters() {
+  const searchInput = document.getElementById('globalSearchInput');
+  if (searchInput) searchInput.value = '';
+  ['filterDeptSelect', 'filterSlotSelect', 'filterBuildingSelect', 'mobileDeptSelect', 'mobileSlotSelect', 'mobileBuildingSelect'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  const fromInput = document.getElementById('filterTimeFrom');
+  if (fromInput) fromInput.value = '';
+  const toInput = document.getElementById('filterTimeTo');
+  if (toInput) toInput.value = '';
+
+  activeSelectedDays = new Set(['ALL']);
+  activeSelectedType = '';
+  activeQuickFilter = 'ALL';
+  isShortlistOnlyMode = false;
+
+  applyFiltersAndRender();
+  showToast('All filters cleared', 'icon-check');
+}
+
+function handleDayToggle(el) {
+  const day = el.dataset.day;
+  if (day === 'ALL') {
+    activeSelectedDays = new Set(['ALL']);
+  } else {
+    activeSelectedDays.delete('ALL');
+    if (activeSelectedDays.has(day)) {
+      activeSelectedDays.delete(day);
+      if (activeSelectedDays.size === 0) activeSelectedDays.add('ALL');
+    } else {
+      activeSelectedDays.add(day);
+    }
+  }
+  applyFiltersAndRender();
+}
+
+function handleTypeToggle(el) {
+  const type = el.dataset.type;
+  activeSelectedType = activeSelectedType === type ? '' : type;
+  applyFiltersAndRender();
+}
+
+function switchView(mode) {
+  activeViewMode = mode;
+  localStorage.setItem('nexus_view_mode', mode);
+
+  ['Grid', 'List', 'Timetable'].forEach(name => {
+    const btn = document.getElementById('btnMode' + name);
+    if (btn) btn.classList.toggle('active', mode === name.toLowerCase());
+  });
+
+  const cardsContainer = document.getElementById('cards-grid');
+  const ttContainer = document.getElementById('timetable-view-container');
+
+  if (mode === 'timetable') {
+    cardsContainer.style.display = 'none';
+    ttContainer.style.display = 'block';
+    renderTimetableView();
+  } else {
+    ttContainer.style.display = 'none';
+    cardsContainer.style.display = 'grid';
+    cardsContainer.classList.toggle('list-view', mode === 'list');
+    renderCardsView();
+  }
+}
+
+function renderCurrentView() {
+  const count = filteredCoursesList.length;
+  const countEl = document.getElementById('resultsCountDisplay');
+  const labelEl = document.getElementById('resultsCountLabel');
+
+  const f = getCurrentFilters();
+  const hasActiveFilters = Boolean(f.search || f.dept || f.slot || f.building || f.timeFrom || f.timeTo || f.type || !f.days.has('ALL') || f.quick !== 'ALL' || f.shortlistOnly);
+
+  if (countEl && labelEl) {
+    countEl.textContent = count;
+    if (hasActiveFilters) {
+      labelEl.textContent = count === 1 ? 'matching your filters' : 'matching your filters';
+    } else {
+      labelEl.textContent = count === 1 ? 'course' : 'courses';
+    }
+  }
+
+  const ttCountAll = document.getElementById('ttCountAll');
+  if (ttCountAll) ttCountAll.textContent = count;
+
+  if (activeViewMode === 'timetable') {
+    renderTimetableView();
+  } else {
+    renderCardsView();
+  }
+}
+
+function copyCourseCode(code, e) {
+  if (e) e.stopPropagation();
+  navigator.clipboard.writeText(code).then(() => {
+    showToast(`Course code ${code} copied`, 'icon-copy');
+  });
+}
+
+function renderCardsView() {
+  const container = document.getElementById('cards-grid');
+  if (filteredCoursesList.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 70px 20px; grid-column: 1 / -1;">
+        <div style="width: 46px; height: 46px; margin: 0 auto 12px; border-radius: var(--radius-sm); background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-faint);">
+          <svg class="v-icon" style="width:20px;height:20px;"><use href="#icon-search"/></svg>
+        </div>
+        <h3 style="font-size: 1.02rem; font-weight: 700; margin-bottom: 6px; color: var(--text-main);">No matching courses</h3>
+        <p style="color: var(--text-muted); font-size: 0.82rem; max-width: 340px; margin: 0 auto 16px;">Try adjusting your keyword or reset filters to display more courses.</p>
+        <button class="btn-reset-filters" style="max-width: 170px; margin: 0 auto;" onclick="resetAllFilters()">Reset Filters</button>
+      </div>
+    `;
+    return;
+  }
+
+  const filters = getCurrentFilters();
+  const highlightDays = filters.days.has('ALL') ? new Set(ALL_DAYS_LIST) : filters.days;
+
+  container.innerHTML = filteredCoursesList.map((course) => {
+    const palette = getDepartmentColor(course.dept);
+    const isStarred = shortlistedCodes.has(course.code);
+
+    const sessionsMarkup = course.sessions.length > 0 ? course.sessions.map(sess => {
+      const dayChips = sess.days.map(d => {
+        const isHl = highlightDays.has(d);
+        return `<span class="day-dot-chip ${isHl ? 'highlighted' : ''}" title="${DAY_EXPANSIONS[d] || d}">${d}</span>`;
+      }).join('');
+
+      return `
+        <div class="session-item">
+          <div class="day-dots-container">${dayChips}</div>
+          <span class="session-time-text">${sess.timeRange}</span>
+          ${sess.venue ? `<span class="session-venue-tag"><svg class="v-icon" style="width:11px;height:11px;"><use href="#icon-map-pin"/></svg>${sess.venue}</span>` : ''}
+        </div>
+      `;
+    }).join('') : '<div class="no-sessions-hint">Session timing not listed</div>';
+
+    const shortSlot = course.slotName.split(' ').slice(0, 2).join(' ');
+
+    return `
+      <div class="course-card" onclick="openCourseModal('${course.id}')" tabindex="0" role="button" aria-label="Course details for ${course.code}: ${course.name}" onkeydown="if(event.key==='Enter'||event.key===' '){openCourseModal('${course.id}');event.preventDefault();}">
+        <div class="card-top">
+          <div class="card-meta-row">
+            <span class="dept-pill" style="background: ${palette.bg}; color: ${palette.fg};">${course.dept}</span>
+            <div class="card-actions-top">
+              ${course.courseType ? `<span class="type-badge">${course.courseType}</span>` : ''}
+              <button class="btn-star ${isStarred ? 'starred' : ''}" onclick="toggleShortlist('${course.code}', event)" title="${isStarred ? 'Remove from planner' : 'Add to planner'}">
+                <svg class="v-icon" style="fill: ${isStarred ? 'currentColor' : 'none'};"><use href="#icon-star"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="course-title-text">${course.name}</div>
+          <div class="course-code-wrap">
+            <span class="course-code-tag">${course.code}</span>
+            <button class="btn-copy-code" onclick="copyCourseCode('${course.code}', event)" title="Copy course code">
+              <svg class="v-icon" style="width:10px;height:10px;"><use href="#icon-copy"/></svg>
+              <span>Copy</span>
+            </button>
+          </div>
+          <div class="instructor-row">
+            <svg class="v-icon"><use href="#icon-user"/></svg>
+            <span>${course.instructor || 'Staff'}</span>
+          </div>
+        </div>
+        <div class="card-sessions-container">
+          ${sessionsMarkup}
+        </div>
+        <div class="card-bottom-footer">
+          <span class="slot-tag-label">Slot: ${shortSlot}</span>
+          <div class="card-bottom-actions">
+            ${course.hasHandout ? `<span class="fch-indicator"><svg class="v-icon" style="width:9px;height:9px;"><use href="#icon-check"/></svg> Handout</span>` : ''}
+            <button class="btn-view-details" onclick="openCourseModal('${course.id}'); event.stopPropagation();">Details</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function setTimetableScope(scope) {
+  timetableScope = scope;
+  document.getElementById('btnTtScopeAll').classList.toggle('active', scope === 'all');
+  document.getElementById('btnTtScopePlanner').classList.toggle('active', scope === 'planner');
+  renderTimetableView();
+}
+
+function renderTimetableView() {
+  const container = document.getElementById('timetableGridTarget');
+  if (!container) return;
+
+  const coursesToRender = timetableScope === 'planner'
+    ? rawCoursesList.filter(c => shortlistedCodes.has(c.code))
+    : filteredCoursesList;
+
+  const slotGrid = {};
+  const distinctStartTimes = new Set();
+  for (const d of ALL_DAYS_LIST) slotGrid[d] = {};
+
+  for (const course of coursesToRender) {
+    for (const sess of course.sessions) {
+      distinctStartTimes.add(sess.startTime);
+      for (const day of sess.days) {
+        if (!slotGrid[day]) slotGrid[day] = {};
+        if (!slotGrid[day][sess.startTime]) slotGrid[day][sess.startTime] = [];
+        slotGrid[day][sess.startTime].push({ course, session: sess });
+      }
+    }
+  }
+
+  let clashCount = 0;
+  let firstClashDesc = '';
+  for (const day of ALL_DAYS_LIST) {
+    for (const time in slotGrid[day]) {
+      if (slotGrid[day][time].length > 1) {
+        clashCount++;
+        if (!firstClashDesc) {
+          const names = slotGrid[day][time].map(x => x.course.code).join(' & ');
+          firstClashDesc = `${names} both meet on ${DAY_LONG_NAMES[day]} at ${time}`;
+        }
+      }
+    }
+  }
+
+  const clashBar = document.getElementById('ttClashWarningBar');
+  const clashText = document.getElementById('ttClashWarningText');
+  if (clashBar && clashText) {
+    if (clashCount > 0) {
+      clashBar.style.display = 'flex';
+      clashText.textContent = `Schedule Clash Detected (${clashCount} overlap${clashCount > 1 ? 's' : ''}): ${firstClashDesc}`;
+    } else {
+      clashBar.style.display = 'none';
+    }
+  }
+
+  const sortedTimes = [...distinctStartTimes].sort();
+  if (sortedTimes.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 60px 20px; color: var(--text-faint); font-size: 0.84rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md);">
+        ${timetableScope === 'planner'
+          ? 'Your Course Planner is empty. Star courses to populate your personalized semester timetable.'
+          : 'No courses match the active filters to generate a timetable grid.'}
+      </div>
+    `;
+    return;
+  }
+
+  let tableHtml = `
+    <div class="timetable-scroll-wrapper">
+      <table class="tt-grid-table">
+        <thead>
+          <tr>
+            <th style="width: 88px; text-align: center;">Time</th>
+            ${ALL_DAYS_LIST.map(d => `<th>${DAY_LONG_NAMES[d]}</th>`).join('')}
+          </tr>
+        </thead>
+        <tbody>
+  `;
+
+  for (const time of sortedTimes) {
+    tableHtml += `<tr><td class="tt-time-col-cell">${time}</td>`;
+    for (const day of ALL_DAYS_LIST) {
+      const cellEntries = (slotGrid[day] && slotGrid[day][time]) || [];
+      const hasClash = cellEntries.length > 1;
+      tableHtml += `<td>`;
+      for (const item of cellEntries) {
+        const pal = getDepartmentColor(item.course.dept);
+        tableHtml += `
+          <div class="tt-item-card ${hasClash ? 'is-clash' : ''}" style="border-left-color: ${pal.fg};" onclick="openCourseModal('${item.course.id}')" title="Click to view details for ${item.course.code}">
+            <div class="tt-item-dept">${item.course.dept} · ${item.course.code} ${hasClash ? '<span style="color:var(--brand-rose); font-weight:800;">[CLASH]</span>' : ''}</div>
+            <div class="tt-item-name">${item.course.name}</div>
+            <div class="tt-item-venue">${item.session.timeRange}${item.session.venue ? ' · ' + item.session.venue : ''}</div>
+          </div>
+        `;
+      }
+      tableHtml += `</td>`;
+    }
+    tableHtml += `</tr>`;
+  }
+
+  tableHtml += `</tbody></table></div>`;
+  container.innerHTML = tableHtml;
+}
+
+function inferCourseCredits(course) {
+  if (course.code.endsWith('M') || course.slotName.includes('FIRST-HALF') || course.slotName.includes('SECOND-HALF')) {
+    return '4 Credits (Modular)';
+  }
+  if (course.name.toLowerCase().includes('lab') || course.name.toLowerCase().includes('project')) {
+    return '6 Credits (Practical)';
+  }
+  return '9 Credits (Standard 3-0-0)';
+}
+
+function inferAcademicLevel(course) {
+  const numMatch = course.code.match(/\d+/);
+  if (numMatch) {
+    const num = parseInt(numMatch[0], 10);
+    if (num >= 600) return `${num}-Level · Postgraduate (M.Tech / Ph.D)`;
+    if (num >= 400) return `${num}-Level · Final Year UG / Dual Degree`;
+    if (num >= 300) return `${num}-Level · 3rd Year UG Department Core`;
+    if (num >= 200) return `${num}-Level · 2nd Year UG Core / Elective`;
+    return `${num}-Level · 1st Year Introductory Core`;
+  }
+  return 'Undergraduate Degree Offering';
+}
+
+function inferPrerequisites(course) {
+  const numMatch = course.code.match(/\d+/);
+  if (numMatch) {
+    const num = parseInt(numMatch[0], 10);
+    if (num >= 600) return 'Departmental permission or instructor consent. Advanced undergraduate or postgraduate standing required.';
+    if (num >= 400) return `Foundational 200/300-level ${course.dept} courses or consent of the instructor.`;
+    if (num >= 300) return `Introductory 200-level sequence in ${course.dept} (e.g. core engineering foundations).`;
+    if (num >= 200) return 'First-year science & math core foundation (MTH101, PHY102, or equivalent).';
+    return 'No prior prerequisites. Open to all students registered in the semester.';
+  }
+  return 'Consent of instructor or completion of departmental prerequisite requirements.';
+}
+
+function inferCourseOverview(course) {
+  return `Comprehensive curriculum exploring principles of ${course.name}. Includes weekly lecture and tutorial meetings in slot ${course.slotName}. Evaluation structured with continuous internal assessment, quizzes, midterm exams, and end-semester examinations conforming to IIT Kanpur academic senate regulations.`;
+}
+
+function openCourseModal(courseId) {
+  const course = rawCoursesList.find(c => c.id === courseId);
+  if (!course) return;
+
+  const pal = getDepartmentColor(course.dept);
+  const deptEl = document.getElementById('modalCourseDept');
+  deptEl.textContent = course.dept;
+  deptEl.style.background = pal.bg;
+  deptEl.style.color = pal.fg;
+
+  document.getElementById('modalCourseTitle').textContent = course.name;
+  document.getElementById('modalCourseCode').textContent = `${course.code} · ${course.courseType || 'REGULAR'}`;
+  document.getElementById('modalCreditsVal').textContent = inferCourseCredits(course);
+  document.getElementById('modalLevelVal').textContent = inferAcademicLevel(course);
+  document.getElementById('modalSlotVal').textContent = course.slotName;
+  document.getElementById('modalFchVal').textContent = course.hasHandout ? 'Available' : 'Pending';
+
+  const clashBox = document.getElementById('modalClashBox');
+  const clashText = document.getElementById('modalClashText');
+  let hasClashWithPlanner = false;
+  let clashCourseCode = '';
+
+  if (!shortlistedCodes.has(course.code)) {
+    for (const code of shortlistedCodes) {
+      const other = rawCoursesList.find(c => c.code === code);
+      if (!other) continue;
+      for (const s1 of course.sessions) {
+        for (const s2 of other.sessions) {
+          const commonDays = s1.days.filter(d => s2.days.includes(d));
+          if (commonDays.length > 0 && s1.startTime < s2.endTime && s1.endTime > s2.startTime) {
+            hasClashWithPlanner = true;
+            clashCourseCode = other.code;
+            break;
+          }
+        }
+        if (hasClashWithPlanner) break;
+      }
+      if (hasClashWithPlanner) break;
+    }
+  }
+
+  if (hasClashWithPlanner) {
+    clashBox.style.display = 'flex';
+    clashText.textContent = `Warning: Timing overlaps with ${clashCourseCode} in your semester planner!`;
+  } else {
+    clashBox.style.display = 'none';
+  }
+
+  document.getElementById('modalPrereqText').textContent = inferPrerequisites(course);
+  document.getElementById('modalDescriptionText').textContent = inferCourseOverview(course);
+
+  document.getElementById('modalInstructorName').textContent = course.instructor || 'Staff Instructor';
+  document.getElementById('modalInstructorEmail').textContent = course.email || 'Email not registered';
+
+  const mailLink = document.getElementById('modalMailLink');
+  if (course.email && course.email.includes('@')) {
+    const cleanMail = course.email.split(/[\s,]+/)[0];
+    mailLink.href = `mailto:${cleanMail}?subject=Query regarding ${course.code} (${course.name})`;
+    mailLink.style.display = 'inline-flex';
+  } else {
+    mailLink.style.display = 'none';
+  }
+
+  document.getElementById('modalFilterFacultyBtn').onclick = () => {
+    closeCourseModal();
+    const instClean = (course.instructor || '').split(/[\s,(]+/)[0];
+    if (instClean) {
+      document.getElementById('globalSearchInput').value = instClean;
+      applyFiltersAndRender();
+    }
+  };
+
+  const sessContainer = document.getElementById('modalSessionsList');
+  if (course.sessions.length > 0) {
+    sessContainer.innerHTML = course.sessions.map(s => `
+      <div class="session-item" style="padding: 7px 12px;">
+        <div class="day-dots-container">${s.days.map(d => `<span class="day-dot-chip highlighted">${d}</span>`).join('')}</div>
+        <span class="session-time-text" style="font-size: 0.82rem;">${s.timeRange}</span>
+        <span class="session-venue-tag" style="font-size: 0.76rem;">
+          <svg class="v-icon" style="width:11px;height:11px;"><use href="#icon-map-pin"/></svg>
+          ${s.venue || 'Venue Pending'}
+        </span>
+      </div>
+    `).join('');
+  } else {
+    sessContainer.innerHTML = '<div class="no-sessions-hint">No session timings registered in pre-registration record</div>';
+  }
+
+  function updateModalStarBtn() {
+    const isStarred = shortlistedCodes.has(course.code);
+    const label = document.getElementById('modalStarBtnLabel');
+    label.textContent = isStarred ? 'Remove from Planner' : 'Add to My Courses';
+    const starBtn = document.getElementById('modalStarBtn');
+    starBtn.classList.toggle('btn-modal-primary', !isStarred);
+    starBtn.classList.toggle('btn-modal-secondary', isStarred);
+  }
+  updateModalStarBtn();
+
+  document.getElementById('modalStarBtn').onclick = () => {
+    toggleShortlist(course.code);
+    updateModalStarBtn();
+  };
+
+  document.getElementById('modalCopySummaryBtn').onclick = () => {
+    const summary = `${course.code}: ${course.name}\nInstructor: ${course.instructor}\nSlot: ${course.slotName}\nMeetings: ${course.sessions.map(s => s.days.join('') + ' ' + s.timeRange + ' @ ' + s.venue).join('; ')}`;
+    navigator.clipboard.writeText(summary).then(() => showToast('Course summary copied', 'icon-copy'));
+  };
+
+  document.getElementById('modalWebSearchBtn').onclick = () => {
+    window.open(`https://www.google.com/search?q=IIT+Kanpur+${encodeURIComponent(course.code)}+${encodeURIComponent(course.name)}+course+handout`, '_blank');
+  };
+
+  document.getElementById('courseDetailModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCourseModal() {
+  document.getElementById('courseDetailModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function handleModalBackdropClick(e) {
+  if (e.target.id === 'courseDetailModal') closeCourseModal();
+}
+
+function openPlannerDrawer() {
+  renderPlannerDrawerContents();
+  document.getElementById('plannerDrawerOverlay').classList.add('open');
+  document.getElementById('plannerDrawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePlannerDrawer() {
+  document.getElementById('plannerDrawerOverlay').classList.remove('open');
+  document.getElementById('plannerDrawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function renderPlannerDrawerContents() {
+  const container = document.getElementById('plannerCoursesList');
+  const banner = document.getElementById('plannerClashBanner');
+  if (!container) return;
+
+  const plannedCourses = rawCoursesList.filter(c => shortlistedCodes.has(c.code));
+
+  document.getElementById('plannerStatCount').textContent = plannedCourses.length;
+
+  let totalCredits = 0;
+  let totalMinutes = 0;
+
+  plannedCourses.forEach(c => {
+    totalCredits += c.code.endsWith('M') ? 4 : 9;
+    c.sessions.forEach(s => {
+      const match = s.timeRange.match(/(\d{1,2}):(\d{2})-(\d{1,2}):(\d{2})/);
+      if (match) {
+        const startM = parseInt(match[1], 10) * 60 + parseInt(match[2], 10);
+        const endM = parseInt(match[3], 10) * 60 + parseInt(match[4], 10);
+        const dur = Math.max(0, endM - startM);
+        totalMinutes += dur * (s.days.length || 1);
+      }
+    });
+  });
+
+  document.getElementById('plannerStatCredits').textContent = totalCredits;
+  document.getElementById('plannerStatHours').textContent = (totalMinutes / 60).toFixed(1);
+
+  const clashList = [];
+  for (let i = 0; i < plannedCourses.length; i++) {
+    for (let j = i + 1; j < plannedCourses.length; j++) {
+      const c1 = plannedCourses[i], c2 = plannedCourses[j];
+      for (const s1 of c1.sessions) {
+        for (const s2 of c2.sessions) {
+          const common = s1.days.filter(d => s2.days.includes(d));
+          if (common.length > 0 && s1.startTime < s2.endTime && s1.endTime > s2.startTime) {
+            clashList.push(`${c1.code} and ${c2.code} overlap on ${common.map(d => DAY_EXPANSIONS[d]).join(', ')} (${s1.startTime}-${s1.endTime})`);
+          }
+        }
+      }
+    }
+  }
+
+  if (clashList.length > 0) {
+    banner.className = 'planner-clash-alert';
+    banner.innerHTML = `
+      <svg class="v-icon"><use href="#icon-alert"/></svg>
+      <div><strong>${clashList.length} Schedule Conflict${clashList.length > 1 ? 's' : ''}:</strong><br>${clashList.join('<br>')}</div>
+    `;
+    banner.style.display = 'flex';
+  } else if (plannedCourses.length > 0) {
+    banner.className = 'planner-clean-alert';
+    banner.innerHTML = `
+      <svg class="v-icon"><use href="#icon-check"/></svg>
+      <span>No schedule conflicts detected. Ready for registration!</span>
+    `;
+    banner.style.display = 'flex';
+  } else {
+    banner.style.display = 'none';
+  }
+
+  if (plannedCourses.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 40px 10px; color: var(--text-muted);">
+        <svg class="v-icon" style="width: 32px; height: 32px; color: var(--text-faint); margin-bottom: 8px;"><use href="#icon-star"/></svg>
+        <div style="font-weight: 700; color: var(--text-main); margin-bottom: 4px;">No courses planned yet</div>
+        <div style="font-size: 0.74rem;">Star courses from the catalog to calculate total credits and detect timetable clashes.</div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = plannedCourses.map(course => {
+    const pal = getDepartmentColor(course.dept);
+    const times = course.sessions.map(s => `${s.days.join('')} ${s.timeRange}`).join(' | ');
+    return `
+      <div class="planner-course-item">
+        <div class="planner-course-header">
+          <span class="planner-course-code" style="color: ${pal.fg};">${course.code}</span>
+          <button class="planner-course-remove" onclick="toggleShortlist('${course.code}')" title="Remove from planner">
+            <svg class="v-icon" style="width:14px;height:14px;"><use href="#icon-x"/></svg>
+          </button>
+        </div>
+        <div class="planner-course-name">${course.name}</div>
+        <div class="planner-course-meta">
+          <span>Slot: ${course.slotName}</span>
+          <span>·</span>
+          <span>${times || 'Schedule TBA'}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function viewPlannerInTimetable() {
+  closePlannerDrawer();
+  switchView('timetable');
+  setTimetableScope('planner');
+}
+
+function copyPlannerSchedule() {
+  const planned = rawCoursesList.filter(c => shortlistedCodes.has(c.code));
+  if (planned.length === 0) {
+    showToast('No courses in planner', 'icon-alert');
+    return;
+  }
+  const text = planned.map(c => `• ${c.code}: ${c.name}\n  Slot: ${c.slotName} | Instructor: ${c.instructor}\n  Sessions: ${c.sessions.map(s => s.days.join('') + ' ' + s.timeRange + ' (' + s.venue + ')').join(', ')}`).join('\n\n');
+  navigator.clipboard.writeText(text).then(() => showToast('Planner schedule copied to clipboard', 'icon-copy'));
+}
+
+function clearAllPlannedCourses() {
+  if (shortlistedCodes.size === 0) return;
+  if (confirm('Clear all courses from your semester planner?')) {
+    shortlistedCodes.clear();
+    localStorage.removeItem('nexus_shortlisted');
+    updatePlannerUI();
+    applyFiltersAndRender();
+    showToast('Planner cleared', 'icon-trash');
+  }
+}
+
+function applyTheme(isDark) {
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  document.getElementById('themeIconSun').style.display = isDark ? 'block' : 'none';
+  document.getElementById('themeIconMoon').style.display = isDark ? 'none' : 'block';
+  localStorage.setItem('nexus_theme', isDark ? 'dark' : 'light');
+}
+
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+  applyTheme(!isDark);
+}
+
+function renderFilterControlsMarkup(prefix = '') {
+  const depts = [...new Set(rawCoursesList.map(c => c.dept))].filter(Boolean).sort();
+  const slots = [...new Set(rawCoursesList.map(c => c.slotName))].filter(Boolean).sort();
+  const buildings = [...new Set(rawCoursesList.flatMap(c => c.buildings))].filter(Boolean).sort();
+
+  return `
+    <div class="filter-section">
+      <div class="filter-label-title">Department <span class="count-hint">${depts.length} total</span></div>
+      <select id="${prefix}filterDeptSelect" class="filter-select-input" onchange="applyFiltersAndRender()">
+        <option value="">All Departments</option>
+        ${depts.map(d => `<option value="${d}">${d}</option>`).join('')}
+      </select>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label-title">Schedule Slot <span class="count-hint">${slots.length} slots</span></div>
+      <select id="${prefix}filterSlotSelect" class="filter-select-input" onchange="applyFiltersAndRender()">
+        <option value="">All Slots</option>
+        ${slots.map(s => `<option value="${s}">${s}</option>`).join('')}
+      </select>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label-title">Building / Venue</div>
+      <select id="${prefix}filterBuildingSelect" class="filter-select-input" onchange="applyFiltersAndRender()">
+        <option value="">All Locations</option>
+        ${buildings.map(b => `<option value="${b}">${b}</option>`).join('')}
+      </select>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label-title">Meeting Days</div>
+      <div class="days-button-group">
+        <button class="day-toggle-btn active" data-day="ALL" onclick="handleDayToggle(this)">ALL</button>
+        ${ALL_DAYS_LIST.map(d => `<button class="day-toggle-btn" data-day="${d}" onclick="handleDayToggle(this)">${d}</button>`).join('')}
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label-title">Course Type</div>
+      <div class="type-buttons-wrap">
+        ${['CORE', 'DC', 'DE', 'OE', 'PRF', 'Minor'].map(t => `
+          <button class="type-toggle-btn" data-type="${t}" onclick="handleTypeToggle(this)">${t}</button>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label-title">Time Window</div>
+      <div class="time-range-row">
+        <input type="time" id="${prefix}filterTimeFrom" class="time-input-field" onchange="applyFiltersAndRender()">
+        <span style="color: var(--text-faint); font-size: 0.70rem;">to</span>
+        <input type="time" id="${prefix}filterTimeTo" class="time-input-field" onchange="applyFiltersAndRender()">
+      </div>
+    </div>
+
+    <button class="btn-reset-filters" onclick="resetAllFilters()">
+      <svg class="v-icon" style="width:12px;height:12px;"><use href="#icon-rotate"/></svg>
+      <span>Reset All Filters</span>
+    </button>
+  `;
+}
+
+function setupKeyboardShortcuts() {
+  document.addEventListener('keydown', (e) => {
+    const isMeta = e.metaKey || e.ctrlKey;
+    const activeEl = document.activeElement;
+    const isInputActive = activeEl && ['INPUT', 'SELECT', 'TEXTAREA'].includes(activeEl.tagName);
+
+    if (e.key === '/' && !isInputActive) {
+      e.preventDefault();
+      const searchInput = document.getElementById('globalSearchInput');
+      if (searchInput) searchInput.focus();
+    } else if (isMeta && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      const searchInput = document.getElementById('globalSearchInput');
+      if (searchInput) {
+        searchInput.focus();
+        searchInput.select();
+      }
+    } else if (isMeta && e.key.toLowerCase() === 'b') {
+      e.preventDefault();
+      toggleSidebarCollapse();
+    } else if (e.key === 'Escape') {
+      closeCourseModal();
+      closeMobileFilters();
+      closePlannerDrawer();
+    }
+  });
+}
+
+async function initApp() {
+  const savedTheme = localStorage.getItem('nexus_theme');
+  if (savedTheme) {
+    applyTheme(savedTheme === 'dark');
+  } else {
+    applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+  }
+
+  if (sidebarCollapsed) {
+    const layout = document.getElementById('mainAppLayout');
+    if (layout) layout.classList.add('sidebar-collapsed');
+    const btnToggle = document.getElementById('btnDesktopSidebarToggle');
+    if (btnToggle) btnToggle.classList.add('active');
+    const btnExpand = document.getElementById('btnToolbarExpandSidebar');
+    if (btnExpand) btnExpand.style.display = 'inline-flex';
+  }
+
+  updatePlannerUI();
+  setupKeyboardShortcuts();
+
+  try {
+    const res = await fetch(CSV_DATA_FILE);
+    if (!res.ok) throw new Error(`HTTP fetch failed with code ${res.status}`);
+    const text = await res.text();
+    const rows = parseCSVDocument(text);
+    rawCoursesList = processCourseRecords(rows);
+
+    document.getElementById('desktopFilterContainer').innerHTML = renderFilterControlsMarkup('');
+    document.getElementById('mobileFilterContainer').innerHTML = renderFilterControlsMarkup('mobile');
+
+    document.getElementById('globalSearchInput').addEventListener('input', applyFiltersAndRender);
+
+    restorePersistentFilterState();
+
+    document.getElementById('initialLoadingState').style.display = 'none';
+
+    switchView(activeViewMode);
+    applyFiltersAndRender();
+  } catch (err) {
+    console.error(err);
+    document.getElementById('initialLoadingState').innerHTML = `
+      <div style="color: var(--brand-rose); max-width: 360px; margin: 0 auto; text-align: center;">
+        <div style="width: 40px; height: 40px; margin: 0 auto 12px;">
+          <svg class="v-icon" style="width: 40px; height: 40px;"><use href="#icon-alert"/></svg>
+        </div>
+        <div style="font-weight: 700; font-size: 1rem; margin-bottom: 6px;">Course database connection error</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">Ensure web server is running and CSV schedule file is accessible.<br><code>${err.message}</code></div>
+        <button class="btn-reset-filters" style="max-width: 140px; margin: 0 auto;" onclick="location.reload()">Retry</button>
+      </div>
+    `;
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  initApp();
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
+});
+</script>
+</body>
+</html>

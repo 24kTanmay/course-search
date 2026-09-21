@@ -1,0 +1,20 @@
+{
+  "name": "iitk-course-portal",
+  "version": "1.0.0",
+  "description": "IIT Kanpur Course Information Catalog, Timetable Grid & Semester Planner",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve . -p 8888 --no-clipboard",
+    "start": "npx serve . -p 8888 --no-clipboard",
+    "build": "echo 'Static build ready'"
+  },
+  "keywords": [
+    "iitk",
+    "course-search",
+    "timetable",
+    "semester-planner",
+    "clash-detection"
+  ],
+  "author": "IIT Kanpur",
+  "license": "MIT"
+}

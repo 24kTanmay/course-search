@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://iitk-courses.netlify.app/sitemap.xml
