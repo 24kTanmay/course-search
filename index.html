@@ -1463,207 +1463,441 @@ body::before {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ── MOBILE BOTTOM NAVIGATION DOCK ── */
+.mobile-bottom-nav {
+  display: none;
+}
+
 /* ── RESPONSIVE MEDIA QUERIES ── */
 
 /* ── TABLET (≤992px) ── */
 @media (max-width: 992px) {
   .app-layout { grid-template-columns: 1fr; }
   .sidebar { display: none; }
-  .btn-mobile-filter { display: inline-flex; }
   #btnDesktopSidebarToggle { display: none; }
   #btnToolbarExpandSidebar { display: none !important; }
-
-  /* Looser card grid on tablet */
   #cards-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
 }
 
-/* ── MOBILE (≤640px) ── */
-@media (max-width: 640px) {
-  /* ── Root adjustments ── */
+/* ── MOBILE SCREENS (≤768px) ── */
+@media (max-width: 768px) {
+  /* ── Smooth mobile root & scrolling ── */
   :root {
-    --header-h: 52px;
+    --header-h: auto;
     font-size: 14px;
   }
+  html, body {
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
 
-  /* ── Scrolling fix ── */
-  html, body { overflow-x: hidden; }
-
-  /* ── Header: compact, no overflow ── */
+  /* ── 2-Row Clean Mobile Header ── */
   .app-header {
-    padding: 0 10px;
+    height: auto !important;
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    grid-template-areas:
+      "brand actions"
+      "search search" !important;
+    padding: 10px 14px 12px !important;
+    gap: 10px 8px !important;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: var(--surface) !important;
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(16px);
+  }
+
+  .brand-section {
+    grid-area: brand;
+    align-self: center;
     gap: 8px;
-    height: var(--header-h);
+    min-width: 0;
   }
-  .brand-subtitle { display: none; }
-  .brand-logo-badge { width: 26px; height: 26px; }
-  .brand-title { font-size: 0.82rem; }
+  .brand-logo-badge {
+    width: 28px;
+    height: 28px;
+  }
+  .brand-title {
+    font-size: 0.90rem;
+    font-weight: 800;
+  }
+  .brand-subtitle {
+    display: none;
+  }
 
-  /* Search bar takes full available space */
-  .search-center-box { min-width: 0; }
+  .header-actions {
+    grid-area: actions;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-mobile-filter {
+    display: none !important; /* Managed by bottom dock */
+  }
+  .btn-planner-header {
+    height: 36px;
+    padding: 0 10px;
+    font-size: 0.74rem;
+  }
+  .btn-planner-header span:not(.planner-counter-badge) {
+    display: none;
+  }
+  .btn-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Full-width comfortable search bar */
+  .search-center-box {
+    grid-area: search;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+  .search-icon-wrapper {
+    left: 12px;
+  }
   .search-input-field {
-    height: 34px;
-    font-size: 0.80rem;
-    padding: 0 8px 0 32px;
+    height: 42px;
+    font-size: 15px; /* Prevents unwanted iOS zoom */
+    padding: 0 12px 0 36px;
+    border-radius: var(--radius-md);
+    background: var(--surface-raised);
+    border: 1px solid var(--border-strong);
   }
-  .search-kbd-indicator { display: none; }
+  .search-kbd-indicator {
+    display: none;
+  }
 
-  /* Touch-friendly header buttons (44px min touch target) */
-  .btn-icon { width: 36px; height: 36px; }
-  .btn-planner-header { height: 34px; padding: 0 10px; font-size: 0.75rem; }
-  .btn-mobile-filter { height: 34px; padding: 0 8px; font-size: 0.75rem; }
-
-  /* Hide text labels in header that clutter small screens */
-  .btn-planner-header span:not(.planner-counter-badge) { display: none; }
-
-  /* ── Content area ── */
+  /* ── Main Content Area with Bottom Dock Clearance ── */
   .content-area {
-    padding: 10px 10px 80px; /* bottom padding for mobile nav UX */
+    padding: 12px 12px calc(80px + env(safe-area-inset-bottom, 0px)) !important;
   }
 
-  /* ── Toolbar ── */
+  /* ── Mobile Toolbar ── */
   .toolbar-header {
     flex-direction: column;
     align-items: stretch;
-    gap: 8px;
-    margin-bottom: 10px;
+    gap: 10px;
+    margin-bottom: 12px;
   }
-  .toolbar-stats { gap: 6px; }
-  .stat-pill { font-size: 0.76rem; padding: 3px 8px; }
+  .toolbar-stats {
+    justify-content: space-between;
+    width: 100%;
+  }
+  .stat-pill {
+    font-size: 0.76rem;
+    padding: 4px 10px;
+  }
   .view-mode-group {
     width: 100%;
-    justify-content: stretch;
+    display: flex;
   }
   .view-btn {
     flex: 1;
     justify-content: center;
-    padding: 0 6px;
-    height: 32px;
-    font-size: 0.72rem;
-    gap: 4px;
-  }
-
-  /* ── Active filter chips ── */
-  .active-filters-bar {
-    padding: 6px 10px;
+    height: 36px;
+    font-size: 0.76rem;
     gap: 5px;
-    margin-bottom: 10px;
   }
-  .filter-chip { font-size: 0.70rem; padding: 3px 7px; }
 
-  /* ── Cards: single column, tighter padding ── */
+  /* ── Filter Chips Bar ── */
+  .active-filters-bar {
+    padding: 8px 10px;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .filter-chip {
+    font-size: 0.72rem;
+    padding: 4px 8px;
+  }
+  .filter-chip-remove {
+    padding: 2px;
+  }
+
+  /* ── Course Cards on Mobile ── */
   #cards-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
+    grid-template-columns: 1fr !important;
+    gap: 12px;
   }
-  .card-top { padding: 12px 12px 0; }
-  .card-sessions-container { padding: 0 12px; }
-  .card-bottom-footer { padding: 8px 12px; }
-  .course-title-text { font-size: 0.86rem; }
+  .course-card {
+    border-radius: var(--radius-lg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    border-color: var(--border-strong);
+    padding-bottom: 2px;
+  }
+  .card-top {
+    padding: 14px 14px 0;
+  }
+  .course-title-text {
+    font-size: 0.92rem;
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+  .btn-star {
+    width: 38px;
+    height: 38px;
+  }
+  .card-sessions-container {
+    padding: 0 14px;
+    gap: 6px;
+  }
+  .session-item {
+    padding: 6px 10px;
+    font-size: 0.74rem;
+  }
+  .card-bottom-footer {
+    padding: 10px 14px;
+  }
+  .btn-view-details {
+    height: 34px;
+    padding: 0 14px;
+    font-size: 0.76rem;
+  }
 
-  /* ── Timetable: horizontal scroll with snap ── */
-  .timetable-scroll-wrapper {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x mandatory;
-  }
-  .tt-grid-table { min-width: 700px; }
+  /* ── Timetable with Sticky Time Column ── */
   .tt-elevated-header {
     flex-direction: column;
     align-items: stretch;
-    gap: 8px;
-    padding: 10px 12px;
+    gap: 10px;
+    padding: 12px;
   }
-  .tt-scope-selector { align-self: stretch; }
-  .tt-scope-btn { flex: 1; justify-content: center; }
-  .tt-clash-warning-bar { font-size: 0.72rem; }
+  .tt-scope-selector {
+    width: 100%;
+    display: flex;
+  }
+  .tt-scope-btn {
+    flex: 1;
+    justify-content: center;
+    height: 36px;
+    font-size: 0.76rem;
+  }
+  .timetable-scroll-wrapper {
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+  }
+  .tt-grid-table {
+    min-width: 680px;
+  }
+  /* Sticky time column on mobile horizontal swipe */
+  .tt-grid-table th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 8;
+    background: var(--surface-raised);
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.4);
+  }
+  .tt-time-col-cell {
+    position: sticky;
+    left: 0;
+    z-index: 7;
+    background: var(--surface-sunken);
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.4);
+  }
+  .tt-item-card {
+    padding: 6px 8px;
+  }
+  .tt-item-name {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 
-  /* ── Modal: full screen bottom sheet on mobile ── */
+  /* ── Mobile Modal Bottom Sheet ── */
   .modal-overlay {
-    padding: 0;
-    align-items: flex-end;
+    padding: 0 !important;
+    align-items: flex-end !important;
   }
   .modal-window {
-    max-width: 100%;
-    max-height: 92vh;
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    max-width: 100% !important;
+    max-height: 90vh !important;
+    border-radius: 22px 22px 0 0 !important;
+    border-left: none;
+    border-right: none;
     border-bottom: none;
   }
-  .modal-header { padding: 14px 16px; }
-  .modal-body { padding: 14px 16px; gap: 12px; }
-  .modal-actions-footer {
-    padding: 12px 16px;
-    padding-bottom: max(12px, env(safe-area-inset-bottom));
-    gap: 8px;
+  .modal-window::before {
+    content: '';
+    display: block;
+    width: 44px;
+    height: 4px;
+    border-radius: 99px;
+    background: var(--border-bright);
+    margin: 10px auto 0;
+    flex-shrink: 0;
   }
-  .btn-modal-action { height: 40px; font-size: 0.80rem; } /* bigger touch targets */
+  .modal-header {
+    padding: 12px 16px;
+  }
+  .modal-body {
+    padding: 14px 16px;
+    gap: 14px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .modal-stat-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .modal-actions-footer {
+    padding: 12px 16px calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+    gap: 10px;
+  }
+  .btn-modal-action {
+    flex: 1;
+    height: 44px;
+    font-size: 0.82rem;
+    justify-content: center;
+  }
 
-  /* ── Planner drawer: full width ── */
+  /* ── Mobile Planner Bottom Sheet ── */
   .planner-drawer {
-    max-width: 100%;
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    max-width: 100% !important;
+    height: 90vh !important;
     border-left: none;
     border-top: 1px solid var(--border-strong);
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-    top: auto;
-    bottom: 0;
-    height: 90vh;
+    border-radius: 22px 22px 0 0 !important;
     transform: translateY(100%);
   }
-  .planner-drawer.open { transform: translateY(0); }
-  .planner-header { padding: 14px 16px; }
-  .planner-body { padding: 12px 16px; }
+  .planner-drawer.open {
+    transform: translateY(0);
+  }
+  .planner-drawer::before {
+    content: '';
+    display: block;
+    width: 44px;
+    height: 4px;
+    border-radius: 99px;
+    background: var(--border-bright);
+    margin: 10px auto 0;
+    flex-shrink: 0;
+  }
   .planner-footer {
-    padding: 12px 16px;
-    padding-bottom: max(12px, env(safe-area-inset-bottom));
+    padding: 12px 16px calc(24px + env(safe-area-inset-bottom, 0px)) !important;
   }
 
-  /* ── Mobile bottom sheet (filters) ── */
+  /* ── Mobile Filters Bottom Sheet ── */
   .mobile-bottom-sheet {
-    max-height: 85vh;
-    padding: 14px 16px;
-    padding-bottom: max(24px, env(safe-area-inset-bottom));
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    max-height: 88vh;
+    border-radius: 22px 22px 0 0;
+    padding: 12px 18px calc(28px + env(safe-area-inset-bottom, 0px));
+    -webkit-overflow-scrolling: touch;
+  }
+  .mobile-bottom-sheet::before {
+    content: '';
+    display: block;
+    width: 44px;
+    height: 4px;
+    border-radius: 99px;
+    background: var(--border-bright);
+    margin: 0 auto 12px;
+  }
+  .filter-select-input {
+    height: 42px;
+    font-size: 15px; /* iOS zoom prevention */
+  }
+  .day-toggle-btn {
+    height: 38px;
+    font-size: 0.74rem;
+  }
+  .type-toggle-btn {
+    padding: 6px 12px;
+    font-size: 0.76rem;
   }
 
-  /* ── Toast: full width at bottom ── */
+  /* ── Toast Shelf Centered Above Bottom Dock ── */
   #toast-shelf {
-    bottom: 16px;
-    right: 12px;
-    left: 12px;
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+    left: 14px !important;
+    right: 14px !important;
   }
-  .toast-msg { font-size: 0.76rem; width: 100%; justify-content: center; }
+  .toast-msg {
+    font-size: 0.76rem;
+    width: 100%;
+    justify-content: center;
+  }
 
-  /* ── Modal stat grid: 2-col on mobile ── */
-  .modal-stat-grid { grid-template-columns: 1fr 1fr; }
-
-  /* ── Day buttons: ensure tap area ── */
-  .day-toggle-btn { height: 34px; font-size: 0.70rem; }
-
-  /* ── Planner stat bar: horizontal scroll if needed ── */
-  .planner-stat-bar { grid-template-columns: repeat(3, 1fr); }
-  .planner-stat-num { font-size: 1rem; }
+  /* ── Mobile Fixed Glassmorphic Bottom Dock ── */
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(58px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: rgba(18, 21, 27, 0.94);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border-strong);
+    z-index: 95;
+    justify-content: space-around;
+    align-items: center;
+  }
+  [data-theme="light"] .mobile-bottom-nav {
+    background: rgba(255, 255, 255, 0.94);
+  }
+  .mob-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    height: 100%;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.15s ease;
+  }
+  .mob-nav-item:active {
+    transform: scale(0.94);
+  }
+  .mob-nav-item.active {
+    color: var(--brand-blue);
+  }
+  .mob-nav-item .v-icon {
+    width: 19px;
+    height: 19px;
+  }
+  .mob-badge {
+    position: absolute;
+    top: 6px;
+    right: calc(50% - 18px);
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: var(--brand-blue);
+    color: #ffffff;
+    font-size: 0.62rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 /* ── SMALL MOBILE (≤380px) ── */
 @media (max-width: 380px) {
-  .brand-logo-badge { display: none; } /* save space on very small screens */
-  .brand-title { font-size: 0.78rem; }
-  .search-input-field { font-size: 0.76rem; }
-  #cards-grid { gap: 8px; }
-  .view-btn { font-size: 0.68rem; gap: 3px; }
-  /* Show icon only in view buttons to save space */
+  .brand-title { font-size: 0.82rem; }
   .view-btn span.view-label { display: none; }
-  .tt-grid-table { min-width: 600px; }
   .modal-stat-grid { grid-template-columns: 1fr; }
-}
-
-/* ── SAFE AREA for notched phones (iPhone X+, Android notch) ── */
-@supports (padding: env(safe-area-inset-bottom)) {
-  .content-area {
-    padding-bottom: calc(40px + env(safe-area-inset-bottom));
-  }
-  #toast-shelf {
-    bottom: calc(16px + env(safe-area-inset-bottom));
-  }
 }
 
 /* ── PRINT STYLES ── */
@@ -2037,6 +2271,28 @@ body::before {
   </div>
 </div>
 
+<!-- ════════════ MOBILE BOTTOM DOCK NAVIGATION ════════════ -->
+<nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Mobile Navigation">
+  <button class="mob-nav-item active" id="mobNavCatalog" onclick="handleMobNav('catalog')" title="Browse Catalog">
+    <svg class="v-icon"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    <span>Courses</span>
+  </button>
+  <button class="mob-nav-item" id="mobNavTimetable" onclick="handleMobNav('timetable')" title="Semester Timetable">
+    <svg class="v-icon"><use href="#icon-calendar"/></svg>
+    <span>Timetable</span>
+  </button>
+  <button class="mob-nav-item" id="mobNavFilters" onclick="openMobileFilters()" title="Filters">
+    <svg class="v-icon"><use href="#icon-filter"/></svg>
+    <span>Filters</span>
+    <span class="mob-badge" id="mobNavFilterBadge" style="display:none;">0</span>
+  </button>
+  <button class="mob-nav-item" id="mobNavPlanner" onclick="openPlannerDrawer()" title="My Semester Planner">
+    <svg class="v-icon" style="color: var(--brand-amber);"><use href="#icon-star"/></svg>
+    <span>Planner</span>
+    <span class="mob-badge" id="mobNavPlannerBadge" style="display:none;">0</span>
+  </button>
+</nav>
+
 <!-- ════════════ VECTOR TOAST SHELF ════════════ -->
 <div id="toast-shelf"></div>
 
@@ -2339,6 +2595,12 @@ function updatePlannerUI() {
   const ttCount = document.getElementById('ttCountPlanner');
   if (ttCount) ttCount.textContent = count;
 
+  const mobPlannerBadge = document.getElementById('mobNavPlannerBadge');
+  if (mobPlannerBadge) {
+    mobPlannerBadge.textContent = count;
+    mobPlannerBadge.style.display = count > 0 ? 'flex' : 'none';
+  }
+
   renderPlannerDrawerContents();
 }
 
@@ -2547,6 +2809,12 @@ function syncInputsState() {
 
   const mobBadge = document.getElementById('mobileFilterCount');
   if (mobBadge) mobBadge.textContent = activeCount;
+
+  const mobNavFilterBadge = document.getElementById('mobNavFilterBadge');
+  if (mobNavFilterBadge) {
+    mobNavFilterBadge.textContent = activeCount;
+    mobNavFilterBadge.style.display = activeCount > 0 ? 'flex' : 'none';
+  }
 }
 
 function renderActiveFilterChips() {
@@ -2662,6 +2930,18 @@ function handleTypeToggle(el) {
   applyFiltersAndRender();
 }
 
+function handleMobNav(tab) {
+  if (tab === 'catalog') {
+    if (activeViewMode === 'timetable') {
+      switchView('grid');
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else if (tab === 'timetable') {
+    switchView('timetable');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
 function switchView(mode) {
   activeViewMode = mode;
   localStorage.setItem('nexus_view_mode', mode);
@@ -2670,6 +2950,11 @@ function switchView(mode) {
     const btn = document.getElementById('btnMode' + name);
     if (btn) btn.classList.toggle('active', mode === name.toLowerCase());
   });
+
+  const mobCat = document.getElementById('mobNavCatalog');
+  const mobTt = document.getElementById('mobNavTimetable');
+  if (mobCat) mobCat.classList.toggle('active', mode !== 'timetable');
+  if (mobTt) mobTt.classList.toggle('active', mode === 'timetable');
 
   const cardsContainer = document.getElementById('cards-grid');
   const ttContainer = document.getElementById('timetable-view-container');
@@ -3275,6 +3560,11 @@ function renderFilterControlsMarkup(prefix = '') {
       <svg class="v-icon" style="width:12px;height:12px;"><use href="#icon-rotate"/></svg>
       <span>Reset All Filters</span>
     </button>
+    ${prefix === 'mobile' ? `
+      <button class="btn-modal-action btn-modal-primary" style="width: 100%; height: 44px; margin-top: 14px; justify-content: center; font-size: 0.85rem;" onclick="closeMobileFilters()">
+        <span>View Matching Courses</span>
+      </button>
+    ` : ''}
   `;
 }
 
