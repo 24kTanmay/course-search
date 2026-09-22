@@ -3101,22 +3101,38 @@ function filterCoursesOptimized(courses, f) {
     if (f.building && !course.buildings.includes(f.building)) return false;
     if (f.type && !course.slotName.includes(f.type)) return false;
 
-    if (hasSpecificDays) {
-      if (!course.days.some(d => f.days.has(d))) return false;
-    }
+    const hasTimeWindow = Boolean(fromVal || toVal);
 
-    if (fromVal || toVal) {
+    if (hasSpecificDays && hasTimeWindow) {
       const minT = fromVal || '00:00';
       const maxT = toVal || '23:59';
-      if (!course.sessions.some(s => s.startTime <= maxT && s.endTime >= minT)) return false;
+      // Course MUST have at least one session that occurs on one of the filtered days AND within the time window
+      const hasMatchingSession = course.sessions.some(s => {
+        const onSelectedDay = s.days.some(d => f.days.has(d));
+        const inTimeWindow = s.startTime <= maxT && s.endTime >= minT;
+        return onSelectedDay && inTimeWindow;
+      });
+      if (!hasMatchingSession) return false;
+    } else {
+      if (hasSpecificDays) {
+        if (!course.days.some(d => f.days.has(d))) return false;
+      }
+      if (hasTimeWindow) {
+        const minT = fromVal || '00:00';
+        const maxT = toVal || '23:59';
+        if (!course.sessions.some(s => s.startTime <= maxT && s.endTime >= minT)) return false;
+      }
     }
 
     if (f.quick === 'MORNING') {
-      if (!course.sessions.some(s => s.startTime < '12:00')) return false;
+      const pred = s => s.startTime < '12:00' && (!hasSpecificDays || s.days.some(d => f.days.has(d)));
+      if (!course.sessions.some(pred)) return false;
     } else if (f.quick === 'AFTERNOON') {
-      if (!course.sessions.some(s => s.startTime >= '12:00' && s.startTime < '17:00')) return false;
+      const pred = s => s.startTime >= '12:00' && s.startTime < '17:00' && (!hasSpecificDays || s.days.some(d => f.days.has(d)));
+      if (!course.sessions.some(pred)) return false;
     } else if (f.quick === 'EVENING') {
-      if (!course.sessions.some(s => s.startTime >= '17:00')) return false;
+      const pred = s => s.startTime >= '17:00' && (!hasSpecificDays || s.days.some(d => f.days.has(d)));
+      if (!course.sessions.some(pred)) return false;
     } else if (f.quick === 'HANDOUT') {
       if (!course.hasHandout) return false;
     } else if (f.quick === 'LECTURE_HALL') {
