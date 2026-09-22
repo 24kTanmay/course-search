@@ -1888,14 +1888,18 @@ body::before {
   }
   .modal-actions-footer {
     padding: 14px 18px calc(18px + env(safe-area-inset-bottom, 0px)) !important;
-    gap: 10px;
+    gap: 12px;
+    flex-wrap: nowrap !important;
   }
   .btn-modal-action {
-    flex: 1;
-    height: 46px;
-    font-size: 0.86rem;
+    flex: 1 1 0;
+    min-width: 0;
+    height: 48px;
+    font-size: 0.88rem;
     font-weight: 700;
     justify-content: center;
+    white-space: nowrap;
+    border-radius: 12px;
   }
 
   /* ── Mobile Planner Bottom Sheet ── */
@@ -1977,6 +1981,10 @@ body::before {
     height: 46px;
     font-size: 16px; /* iOS zoom prevention */
     padding: 0 12px;
+    appearance: auto;
+    -webkit-appearance: menulist;
+    touch-action: manipulation;
+    cursor: pointer;
   }
   .day-toggle-btn {
     height: 42px;
@@ -2378,10 +2386,6 @@ body::before {
     </div>
 
     <div class="modal-actions-footer">
-      <button class="btn-modal-action btn-modal-secondary" id="modalWebSearchBtn">
-        <svg class="v-icon"><use href="#icon-external"/></svg>
-        <span>Search Syllabus Web</span>
-      </button>
       <button class="btn-modal-action btn-modal-secondary" id="modalCopySummaryBtn">
         <svg class="v-icon"><use href="#icon-copy"/></svg>
         <span>Copy Details</span>
@@ -2579,6 +2583,24 @@ function toTitleCase(str) {
     .join('');
 }
 
+// ── Clean full faculty name (e.g. "SANJAY  MITTAL   (I), Rachana Agrawal(O)" → "Sanjay Mittal") ──
+function cleanFacultyName(raw) {
+  if (!raw) return '';
+  let primary = raw;
+  if (raw.includes(',')) {
+    const parts = raw.split(',');
+    const inCharge = parts.find(p => /\(I\)/i.test(p));
+    primary = inCharge ? inCharge : parts[0];
+  }
+  // Remove parentheticals such as (I), (O), (II), etc.
+  let cleaned = primary.replace(/\s*\([^)]*\)/g, '');
+  // Remove trailing and standalone dots/symbols
+  cleaned = cleaned.replace(/[.,;]+$/, '').replace(/\s+\./g, '');
+  // Collapse whitespace
+  cleaned = cleaned.replace(/\s+/g, ' ').trim();
+  return toTitleCase(cleaned);
+}
+
 function parseDaysString(str) {
   if (!str) return [];
   const days = [];
@@ -2664,14 +2686,25 @@ function buildCourseSearchIndex(course) {
     }
   });
 
-  const instructorClean = (course.instructor || '').replace(/\s*\([A-Z]\)/g, '').replace(/\s+/g, ' ').trim();
-  const emailClean = (course.email || '').replace(/\s*\([A-Z]\)/g, '').replace(/\s+/g, ' ').trim();
+  const facultyTokens = [];
+  if (course.instructor) {
+    facultyTokens.push(course.instructor);
+    facultyTokens.push(cleanFacultyName(course.instructor));
+    // Also include individual faculty members if comma-separated
+    if (course.instructor.includes(',')) {
+      course.instructor.split(',').forEach(p => {
+        const c = cleanFacultyName(p);
+        if (c) facultyTokens.push(c);
+      });
+    }
+  }
+  const emailClean = (course.email || '').replace(/\s*\([^)]*\)/g, '').replace(/\s+/g, ' ').trim();
 
   const allTokens = [
     course.dept,
     course.code,
     course.name,
-    instructorClean,
+    ...facultyTokens,
     emailClean,
     course.slotName,
     course.courseType,
@@ -2817,21 +2850,29 @@ function closeMobileFilters() {
 // ── Filter State & Multi-Token Match ──
 function getCurrentFilters() {
   const searchInput = document.getElementById('globalSearchInput');
-  const deptSelect = document.getElementById('filterDeptSelect');
-  const slotSelect = document.getElementById('filterSlotSelect');
-  const buildingSelect = document.getElementById('filterBuildingSelect');
+
+  // Read select values — prefer whichever set (mobile/desktop) has a non-empty value.
+  // On real phones the sidebar is hidden so only the mobile selects are user-accessible.
+  const getSelectVal = (desktopId, mobileId) => {
+    const desktop = document.getElementById(desktopId);
+    const mobile  = document.getElementById(mobileId);
+    if (mobile && mobile.value)  return mobile.value;
+    if (desktop && desktop.value) return desktop.value;
+    return '';
+  };
+
   const fromInput = document.getElementById('filterTimeFrom');
-  const toInput = document.getElementById('filterTimeTo');
+  const toInput   = document.getElementById('filterTimeTo');
 
   return {
     search: searchInput ? searchInput.value.trim() : '',
-    dept: deptSelect ? deptSelect.value : '',
-    slot: slotSelect ? slotSelect.value : '',
-    building: buildingSelect ? buildingSelect.value : '',
+    dept:     getSelectVal('filterDeptSelect',     'mobileDeptSelect'),
+    slot:     getSelectVal('filterSlotSelect',     'mobileSlotSelect'),
+    building: getSelectVal('filterBuildingSelect', 'mobileBuildingSelect'),
     timeFrom: fromInput ? fromInput.value : '',
-    timeTo: toInput ? toInput.value : '',
-    type: activeSelectedType,
-    days: activeSelectedDays,
+    timeTo:   toInput   ? toInput.value   : '',
+    type:  activeSelectedType,
+    days:  activeSelectedDays,
     quick: activeQuickFilter,
     shortlistOnly: isShortlistOnlyMode
   };
@@ -2937,26 +2978,15 @@ function restorePersistentFilterState() {
     const s = JSON.parse(savedStr);
 
     if (s.search) document.getElementById('globalSearchInput').value = s.search;
-    if (s.dept) {
-      const el = document.getElementById('filterDeptSelect');
-      if (el) el.value = s.dept;
-    }
-    if (s.slot) {
-      const el = document.getElementById('filterSlotSelect');
-      if (el) el.value = s.slot;
-    }
-    if (s.building) {
-      const el = document.getElementById('filterBuildingSelect');
-      if (el) el.value = s.building;
-    }
-    if (s.timeFrom) {
-      const el = document.getElementById('filterTimeFrom');
-      if (el) el.value = s.timeFrom;
-    }
-    if (s.timeTo) {
-      const el = document.getElementById('filterTimeTo');
-      if (el) el.value = s.timeTo;
-    }
+    const setBoth = (id1, id2, val) => {
+      const e1 = document.getElementById(id1); if (e1) e1.value = val || '';
+      const e2 = document.getElementById(id2); if (e2) e2.value = val || '';
+    };
+    if (s.dept) setBoth('filterDeptSelect', 'mobileDeptSelect', s.dept);
+    if (s.slot) setBoth('filterSlotSelect', 'mobileSlotSelect', s.slot);
+    if (s.building) setBoth('filterBuildingSelect', 'mobileBuildingSelect', s.building);
+    if (s.timeFrom) setBoth('filterTimeFrom', 'mobileTimeFrom', s.timeFrom);
+    if (s.timeTo) setBoth('filterTimeTo', 'mobileTimeTo', s.timeTo);
     if (s.type) activeSelectedType = s.type;
     if (s.days && Array.isArray(s.days)) activeSelectedDays = new Set(s.days);
     if (s.quick) activeQuickFilter = s.quick;
@@ -3039,14 +3069,18 @@ function renderActiveFilterChips() {
   if (f.search) {
     chips.push({ label: `"${f.search}"`, clear: () => { document.getElementById('globalSearchInput').value = ''; } });
   }
+  const clearBoth = (id1, id2) => {
+    const e1 = document.getElementById(id1); if (e1) e1.value = '';
+    const e2 = document.getElementById(id2); if (e2) e2.value = '';
+  };
   if (f.dept) {
-    chips.push({ label: `Dept: ${f.dept}`, clear: () => { const el = document.getElementById('filterDeptSelect'); if (el) el.value = ''; } });
+    chips.push({ label: `Dept: ${f.dept}`, clear: () => clearBoth('filterDeptSelect', 'mobileDeptSelect') });
   }
   if (f.slot) {
-    chips.push({ label: `Slot: ${f.slot}`, clear: () => { const el = document.getElementById('filterSlotSelect'); if (el) el.value = ''; } });
+    chips.push({ label: `Slot: ${f.slot}`, clear: () => clearBoth('filterSlotSelect', 'mobileSlotSelect') });
   }
   if (f.building) {
-    chips.push({ label: `Venue: ${f.building}`, clear: () => { const el = document.getElementById('filterBuildingSelect'); if (el) el.value = ''; } });
+    chips.push({ label: `Venue: ${f.building}`, clear: () => clearBoth('filterBuildingSelect', 'mobileBuildingSelect') });
   }
   if (!f.days.has('ALL')) {
     f.days.forEach(d => {
@@ -3101,14 +3135,11 @@ function removeSingleChip(idx) {
 function resetAllFilters() {
   const searchInput = document.getElementById('globalSearchInput');
   if (searchInput) searchInput.value = '';
-  ['filterDeptSelect', 'filterSlotSelect', 'filterBuildingSelect', 'mobileDeptSelect', 'mobileSlotSelect', 'mobileBuildingSelect'].forEach(id => {
+  ['filterDeptSelect', 'filterSlotSelect', 'filterBuildingSelect', 'filterTimeFrom', 'filterTimeTo',
+   'mobileDeptSelect', 'mobileSlotSelect', 'mobileBuildingSelect', 'mobileTimeFrom', 'mobileTimeTo'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
-  const fromInput = document.getElementById('filterTimeFrom');
-  if (fromInput) fromInput.value = '';
-  const toInput = document.getElementById('filterTimeTo');
-  if (toInput) toInput.value = '';
 
   activeSelectedDays = new Set(['ALL']);
   activeSelectedType = '';
@@ -3553,10 +3584,14 @@ function openCourseModal(courseId) {
 
   document.getElementById('modalFilterFacultyBtn').onclick = () => {
     closeCourseModal();
-    const instClean = (course.instructor || '').split(/[\s,(]+/)[0];
+    const instClean = cleanFacultyName(course.instructor);
     if (instClean) {
-      document.getElementById('globalSearchInput').value = instClean;
-      applyFiltersAndRender();
+      const searchInput = document.getElementById('globalSearchInput');
+      if (searchInput) {
+        searchInput.value = instClean;
+      }
+      applyFiltersAndRender(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -3596,9 +3631,6 @@ function openCourseModal(courseId) {
     navigator.clipboard.writeText(summary).then(() => showToast('Course summary copied', 'icon-copy'));
   };
 
-  document.getElementById('modalWebSearchBtn').onclick = () => {
-    window.open(`https://www.google.com/search?q=IIT+Kanpur+${encodeURIComponent(course.code)}+${encodeURIComponent(course.name)}+course+handout`, '_blank');
-  };
 
   document.getElementById('courseDetailModal').classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -3759,15 +3791,46 @@ function toggleTheme() {
   applyTheme(!isDark);
 }
 
+function handleFilterInputChange(sourceId) {
+  const syncPairs = [
+    ['filterDeptSelect', 'mobileDeptSelect'],
+    ['filterSlotSelect', 'mobileSlotSelect'],
+    ['filterBuildingSelect', 'mobileBuildingSelect'],
+    ['filterTimeFrom', 'mobileTimeFrom'],
+    ['filterTimeTo', 'mobileTimeTo']
+  ];
+  const src = document.getElementById(sourceId);
+  if (src) {
+    for (const [desk, mob] of syncPairs) {
+      if (sourceId === desk) {
+        const mobEl = document.getElementById(mob);
+        if (mobEl) mobEl.value = src.value;
+        break;
+      } else if (sourceId === mob) {
+        const deskEl = document.getElementById(desk);
+        if (deskEl) deskEl.value = src.value;
+        break;
+      }
+    }
+  }
+  applyFiltersAndRender();
+}
+
 function renderFilterControlsMarkup(prefix = '') {
   const depts = [...new Set(rawCoursesList.map(c => c.dept))].filter(Boolean).sort();
   const slots = [...new Set(rawCoursesList.map(c => c.slotName))].filter(Boolean).sort();
   const buildings = [...new Set(rawCoursesList.flatMap(c => c.buildings))].filter(Boolean).sort();
 
+  const idDept = prefix ? `${prefix}DeptSelect` : 'filterDeptSelect';
+  const idSlot = prefix ? `${prefix}SlotSelect` : 'filterSlotSelect';
+  const idBuilding = prefix ? `${prefix}BuildingSelect` : 'filterBuildingSelect';
+  const idTimeFrom = prefix ? `${prefix}TimeFrom` : 'filterTimeFrom';
+  const idTimeTo = prefix ? `${prefix}TimeTo` : 'filterTimeTo';
+
   return `
     <div class="filter-section">
       <div class="filter-label-title">Department <span class="count-hint">${depts.length} total</span></div>
-      <select id="${prefix}filterDeptSelect" class="filter-select-input" onchange="applyFiltersAndRender()">
+      <select id="${idDept}" class="filter-select-input" onchange="handleFilterInputChange('${idDept}')">
         <option value="">All Departments</option>
         ${depts.map(d => `<option value="${d}">${d}</option>`).join('')}
       </select>
@@ -3775,7 +3838,7 @@ function renderFilterControlsMarkup(prefix = '') {
 
     <div class="filter-section">
       <div class="filter-label-title">Schedule Slot <span class="count-hint">${slots.length} slots</span></div>
-      <select id="${prefix}filterSlotSelect" class="filter-select-input" onchange="applyFiltersAndRender()">
+      <select id="${idSlot}" class="filter-select-input" onchange="handleFilterInputChange('${idSlot}')">
         <option value="">All Slots</option>
         ${slots.map(s => `<option value="${s}">${s}</option>`).join('')}
       </select>
@@ -3783,7 +3846,7 @@ function renderFilterControlsMarkup(prefix = '') {
 
     <div class="filter-section">
       <div class="filter-label-title">Building / Venue</div>
-      <select id="${prefix}filterBuildingSelect" class="filter-select-input" onchange="applyFiltersAndRender()">
+      <select id="${idBuilding}" class="filter-select-input" onchange="handleFilterInputChange('${idBuilding}')">
         <option value="">All Locations</option>
         ${buildings.map(b => `<option value="${b}">${b}</option>`).join('')}
       </select>
@@ -3809,9 +3872,9 @@ function renderFilterControlsMarkup(prefix = '') {
     <div class="filter-section">
       <div class="filter-label-title">Time Window</div>
       <div class="time-range-row">
-        <input type="time" id="${prefix}filterTimeFrom" class="time-input-field" onchange="applyFiltersAndRender()">
+        <input type="time" id="${idTimeFrom}" class="time-input-field" onchange="handleFilterInputChange('${idTimeFrom}')">
         <span style="color: var(--text-faint); font-size: 0.70rem;">to</span>
-        <input type="time" id="${prefix}filterTimeTo" class="time-input-field" onchange="applyFiltersAndRender()">
+        <input type="time" id="${idTimeTo}" class="time-input-field" onchange="handleFilterInputChange('${idTimeTo}')">
       </div>
     </div>
 
@@ -3820,7 +3883,7 @@ function renderFilterControlsMarkup(prefix = '') {
       <span>Reset All Filters</span>
     </button>
     ${prefix === 'mobile' ? `
-      <button class="btn-modal-action btn-modal-primary" style="width: 100%; height: 44px; margin-top: 14px; justify-content: center; font-size: 0.85rem;" onclick="closeMobileFilters()">
+      <button class="btn-modal-action btn-modal-primary" style="width: 100%; height: 46px; margin-top: 14px; justify-content: center; font-size: 0.88rem; border-radius: 12px;" onclick="closeMobileFilters()">
         <span>View Matching Courses</span>
       </button>
     ` : ''}
