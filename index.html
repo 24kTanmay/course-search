@@ -467,6 +467,178 @@ body::before {
   border-color: var(--brand-blue);
 }
 
+/* ── Modern Time Window Filter Card (Matches UI Mockup) ── */
+.time-filter-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: var(--transition);
+}
+[data-theme="light"] .time-filter-card {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.time-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.time-card-icon-bubble {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand-blue);
+  flex-shrink: 0;
+}
+[data-theme="light"] .time-card-icon-bubble {
+  background: #eff6ff;
+  border-color: #dbeafe;
+  color: #2563eb;
+}
+.time-card-titles {
+  display: flex;
+  flex-direction: column;
+}
+.time-card-title {
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.25;
+}
+.time-card-subtitle {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+/* 12-slot preset grid */
+.time-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+.time-slot-chip {
+  min-height: 38px;
+  padding: 6px 8px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: var(--transition);
+  user-select: none;
+  line-height: 1.2;
+}
+[data-theme="light"] .time-slot-chip {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  color: #334155;
+}
+.time-slot-chip:hover {
+  border-color: var(--brand-blue);
+  background: var(--surface-hover);
+}
+[data-theme="light"] .time-slot-chip:hover {
+  background: #f8fafc;
+  border-color: #93c5fd;
+}
+.time-slot-chip.active {
+  background: var(--brand-blue) !important;
+  border-color: var(--brand-blue) !important;
+  color: #ffffff !important;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+}
+
+/* Custom Range Accordion */
+.time-custom-accordion {
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+[data-theme="light"] .time-custom-accordion {
+  border-color: #f1f5f9;
+}
+.time-custom-toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px 0;
+  text-align: left;
+}
+.time-custom-toggle-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.time-custom-icon-bubble {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+[data-theme="light"] .time-custom-icon-bubble {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+.time-custom-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.25;
+}
+.time-custom-subtitle {
+  font-size: 0.70rem;
+  color: var(--text-muted);
+}
+.time-custom-chevron {
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.time-custom-accordion.expanded .time-custom-chevron {
+  transform: rotate(90deg);
+}
+
+/* Collapsible inputs drawer */
+.time-custom-drawer {
+  display: none;
+  padding-top: 8px;
+  gap: 8px;
+  flex-direction: column;
+}
+.time-custom-accordion.expanded .time-custom-drawer {
+  display: flex;
+}
+
 .days-button-group {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -2129,6 +2301,8 @@ body::before {
   <symbol id="icon-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></symbol>
   <symbol id="icon-rotate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></symbol>
   <symbol id="icon-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></symbol>
+  <symbol id="icon-sliders" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></symbol>
+  <symbol id="icon-chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></symbol>
 </svg>
 
 <!-- ════════════ HEADER ════════════ -->
@@ -2869,8 +3043,8 @@ function getCurrentFilters() {
     dept:     getSelectVal('filterDeptSelect',     'mobileDeptSelect'),
     slot:     getSelectVal('filterSlotSelect',     'mobileSlotSelect'),
     building: getSelectVal('filterBuildingSelect', 'mobileBuildingSelect'),
-    timeFrom: fromInput ? fromInput.value : '',
-    timeTo:   toInput   ? toInput.value   : '',
+    timeFrom: getSelectVal('filterTimeFrom',       'mobileTimeFrom'),
+    timeTo:   getSelectVal('filterTimeTo',         'mobileTimeTo'),
     type:  activeSelectedType,
     days:  activeSelectedDays,
     quick: activeQuickFilter,
@@ -3056,6 +3230,8 @@ function syncInputsState() {
     mobNavFilterBadge.textContent = activeCount;
     mobNavFilterBadge.style.display = activeCount > 0 ? 'flex' : 'none';
   }
+
+  syncTimeSlotChips(f.timeFrom, f.timeTo);
 }
 
 function renderActiveFilterChips() {
@@ -3094,9 +3270,13 @@ function renderActiveFilterChips() {
     chips.push({ label: `Type: ${f.type}`, clear: () => { activeSelectedType = ''; } });
   }
   if (f.timeFrom || f.timeTo) {
-    chips.push({ label: `Time: ${f.timeFrom || '00:00'} - ${f.timeTo || '23:59'}`, clear: () => {
-      const fIn = document.getElementById('filterTimeFrom'); if (fIn) fIn.value = '';
-      const tIn = document.getElementById('filterTimeTo'); if (tIn) tIn.value = '';
+    const matchedPreset = typeof TIME_SLOT_PRESETS !== 'undefined' ? TIME_SLOT_PRESETS.find(p => p.from === f.timeFrom && p.to === f.timeTo) : null;
+    const timeLabel = matchedPreset ? `Time: ${matchedPreset.label}` : `Time: ${f.timeFrom || '00:00'} – ${f.timeTo || '23:59'}`;
+    chips.push({ label: timeLabel, clear: () => {
+      ['filterTimeFrom', 'mobileTimeFrom', 'filterTimeTo', 'mobileTimeTo'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.value = '';
+      });
+      syncTimeSlotChips('', '');
     }});
   }
   if (f.shortlistOnly) {
@@ -3146,6 +3326,7 @@ function resetAllFilters() {
   activeQuickFilter = 'ALL';
   isShortlistOnlyMode = false;
 
+  syncTimeSlotChips('', '');
   applyFiltersAndRender();
   showToast('All filters cleared', 'icon-check');
 }
@@ -3816,6 +3997,57 @@ function handleFilterInputChange(sourceId) {
   applyFiltersAndRender();
 }
 
+const TIME_SLOT_PRESETS = [
+  { label: '8:00 – 9:00 AM', from: '08:00', to: '09:00' },
+  { label: '9:00 – 10:00 AM', from: '09:00', to: '10:00' },
+  { label: '10:00 – 11:00 AM', from: '10:00', to: '11:00' },
+  { label: '11:00 – 12:00 PM', from: '11:00', to: '12:00' },
+  { label: '12:00 – 1:00 PM', from: '12:00', to: '13:00' },
+  { label: '1:00 – 2:00 PM', from: '13:00', to: '14:00' },
+  { label: '2:00 – 3:00 PM', from: '14:00', to: '15:00' },
+  { label: '3:00 – 4:00 PM', from: '15:00', to: '16:00' },
+  { label: '4:00 – 5:00 PM', from: '16:00', to: '17:00' },
+  { label: '5:00 – 6:00 PM', from: '17:00', to: '18:00' },
+  { label: '6:00 – 7:00 PM', from: '18:00', to: '19:00' },
+  { label: '7:00 – 8:00 PM', from: '19:00', to: '20:00' }
+];
+
+function selectTimeSlotPreset(from, to) {
+  const currentF = getCurrentFilters();
+  const isAlreadyActive = (currentF.timeFrom === from && currentF.timeTo === to);
+
+  const newFrom = isAlreadyActive ? '' : from;
+  const newTo = isAlreadyActive ? '' : to;
+
+  ['filterTimeFrom', 'mobileTimeFrom'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = newFrom;
+  });
+  ['filterTimeTo', 'mobileTimeTo'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = newTo;
+  });
+
+  syncTimeSlotChips(newFrom, newTo);
+  applyFiltersAndRender();
+}
+
+function syncTimeSlotChips(fromVal, toVal) {
+  document.querySelectorAll('.time-slot-chip').forEach(chip => {
+    const f = chip.dataset.from;
+    const t = chip.dataset.to;
+    const isActive = Boolean(fromVal && toVal && f === fromVal && t === toVal);
+    chip.classList.toggle('active', isActive);
+  });
+}
+
+function toggleCustomTimeAccordion(prefix = '') {
+  const accordion = document.getElementById(`${prefix}timeCustomAccordion`);
+  if (accordion) {
+    accordion.classList.toggle('expanded');
+  }
+}
+
 function renderFilterControlsMarkup(prefix = '') {
   const depts = [...new Set(rawCoursesList.map(c => c.dept))].filter(Boolean).sort();
   const slots = [...new Set(rawCoursesList.map(c => c.slotName))].filter(Boolean).sort();
@@ -3869,12 +4101,49 @@ function renderFilterControlsMarkup(prefix = '') {
       </div>
     </div>
 
-    <div class="filter-section">
-      <div class="filter-label-title">Time Window</div>
-      <div class="time-range-row">
-        <input type="time" id="${idTimeFrom}" class="time-input-field" onchange="handleFilterInputChange('${idTimeFrom}')">
-        <span style="color: var(--text-faint); font-size: 0.70rem;">to</span>
-        <input type="time" id="${idTimeTo}" class="time-input-field" onchange="handleFilterInputChange('${idTimeTo}')">
+    <div class="time-filter-card">
+      <div class="time-card-header">
+        <div class="time-card-icon-bubble">
+          <svg class="v-icon" style="width:18px;height:18px;"><use href="#icon-clock"/></svg>
+        </div>
+        <div class="time-card-titles">
+          <div class="time-card-title">Time Window</div>
+          <div class="time-card-subtitle">Select a 1-hour time slot (8:00 AM – 8:00 PM)</div>
+        </div>
+      </div>
+
+      <div class="time-slots-grid">
+        ${TIME_SLOT_PRESETS.map(slot => `
+          <button type="button" 
+                  class="time-slot-chip" 
+                  data-from="${slot.from}" 
+                  data-to="${slot.to}" 
+                  onclick="selectTimeSlotPreset('${slot.from}', '${slot.to}')">
+            ${slot.label}
+          </button>
+        `).join('')}
+      </div>
+
+      <div class="time-custom-accordion" id="${prefix}timeCustomAccordion">
+        <button type="button" class="time-custom-toggle-btn" onclick="toggleCustomTimeAccordion('${prefix}')">
+          <div class="time-custom-toggle-left">
+            <div class="time-custom-icon-bubble">
+              <svg class="v-icon" style="width:15px;height:15px;"><use href="#icon-sliders"/></svg>
+            </div>
+            <div>
+              <div class="time-custom-title">Custom Range</div>
+              <div class="time-custom-subtitle">Select a custom start and end time</div>
+            </div>
+          </div>
+          <svg class="v-icon time-custom-chevron"><use href="#icon-chevron-right"/></svg>
+        </button>
+        <div class="time-custom-drawer">
+          <div class="time-range-row" style="margin-top: 6px;">
+            <input type="time" id="${idTimeFrom}" class="time-input-field" onchange="handleFilterInputChange('${idTimeFrom}')">
+            <span style="color: var(--text-faint); font-size: 0.70rem;">to</span>
+            <input type="time" id="${idTimeTo}" class="time-input-field" onchange="handleFilterInputChange('${idTimeTo}')">
+          </div>
+        </div>
       </div>
     </div>
 
