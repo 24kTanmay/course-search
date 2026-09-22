@@ -3106,10 +3106,10 @@ function filterCoursesOptimized(courses, f) {
     if (hasSpecificDays && hasTimeWindow) {
       const minT = fromVal || '00:00';
       const maxT = toVal || '23:59';
-      // Course MUST have at least one session that occurs on one of the filtered days AND within the time window
+      // Strict overlap: avoid classes that end at or before minT (e.g. ending at 4:00), or start at or after maxT (e.g. starting at 5:00)
       const hasMatchingSession = course.sessions.some(s => {
         const onSelectedDay = s.days.some(d => f.days.has(d));
-        const inTimeWindow = s.startTime <= maxT && s.endTime >= minT;
+        const inTimeWindow = s.startTime < maxT && s.endTime > minT;
         return onSelectedDay && inTimeWindow;
       });
       if (!hasMatchingSession) return false;
@@ -3120,7 +3120,8 @@ function filterCoursesOptimized(courses, f) {
       if (hasTimeWindow) {
         const minT = fromVal || '00:00';
         const maxT = toVal || '23:59';
-        if (!course.sessions.some(s => s.startTime <= maxT && s.endTime >= minT)) return false;
+        // Strict overlap: avoid classes ending at minT or starting at maxT
+        if (!course.sessions.some(s => s.startTime < maxT && s.endTime > minT)) return false;
       }
     }
 
